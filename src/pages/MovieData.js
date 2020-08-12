@@ -2,10 +2,10 @@ import React, {useContext,useState,useEffect, Fragment} from 'react'
 import axios from 'axios'
 import { makeStyles, Table, TableHead, TableRow, TableCell, TableBody, Button,Modal,Backdrop,Fade, 
     FormControlLabel,InputLabel,Input,FormHelperText,Grid,TextField,Checkbox,Link  } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import PlusIcon from '@material-ui/icons/Add'
-import Title from '../layout/Title';
 
 const MovieData = ()=>{
     const [apiMovie] = useState('https://backendexample.sanbersy.com/api/movies')
@@ -79,6 +79,9 @@ const MovieData = ()=>{
 
     const handleSubmit = (event) => {
         event.preventDefault();
+
+        
+
         if (inputMovie.title.replace(/\s/g,'') === '') {
             return
         }
@@ -146,41 +149,7 @@ const MovieData = ()=>{
 
     }
 
-    const handleChange = (event) => {
-        let typeOfInput = event.target.name
-        
-
-        switch (typeOfInput) {
-            case "title":
-                setInputMovie({...inputMovie, title: event.target.value});
-                break;
-            case "description":
-                setInputMovie({...inputMovie, description: event.target.value});
-                break;
-            case "year":
-                setInputMovie({...inputMovie, year: event.target.value});
-                break;
-            case "duration":
-                setInputMovie({...inputMovie, duration: event.target.value});
-                break;
-            case "genre":
-                setInputMovie({...inputMovie, genre: event.target.value});
-                break;
-            case "rating":
-                setInputMovie({...inputMovie, rating: event.target.value});
-                break;
-            case "review":
-                setInputMovie({...inputMovie, review: event.target.value});
-                break;
-            case "image_url":
-                setInputMovie({...inputMovie, image_url: event.target.value});
-                break;
-        
-            default:
-                break;
-        }
-    }
-
+  
     const Action = ({movieId}) => {
         const handleDelete = () => {
             let newMovies = movies.filter(el => el.id != movieId)
@@ -238,10 +207,111 @@ const MovieData = ()=>{
         setOpen(false);
     };
 
+    const handleChange = (event) => {
+        let typeOfInput = event.target.name
+        
+
+        switch (typeOfInput) {
+            case "title":
+                setInputMovie({...inputMovie, title: event.target.value});
+                break;
+            case "description":
+                setInputMovie({...inputMovie, description: event.target.value});
+                break;
+            case "year":
+                setInputMovie({...inputMovie, year: event.target.value});
+                break;
+            case "duration":
+                setInputMovie({...inputMovie, duration: event.target.value});
+                break;
+            case "genre":
+                setInputMovie({...inputMovie, genre: event.target.value});
+                break;
+            case "rating":
+                setInputMovie({...inputMovie, rating: event.target.value});
+                break;
+            case "review":
+                setInputMovie({...inputMovie, review: event.target.value});
+                break;
+            case "image_url":
+                setInputMovie({...inputMovie, image_url: event.target.value});
+                break;
+        
+            default:
+                break;
+        }
+    }
+
+    
     const ModalForm = () => {
+        
+    
         return(
             <>
-            <Modal
+            </>
+        )
+    }
+
+
+
+    return(
+        <>
+        <Fragment>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                <Typography componecomponent="h2" variant="h4" color="primary" gutterBottomnt >Movie List</Typography>
+                </Grid>
+                <Grid item xs={12} sm={6} alignItems="flex-end">
+                    <Button 
+                    variant='outlined' 
+                    color='inherit' 
+                    className={classes.button}
+                    onClick={()=>handleOpen('create')}><PlusIcon/></Button>
+                </Grid>
+            </Grid>
+            
+            
+            <Table size='medium'>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>No</TableCell>
+                        <TableCell>Title</TableCell>
+                        <TableCell>Description</TableCell>
+                        <TableCell>Year</TableCell>
+                        <TableCell>Duration</TableCell>
+                        <TableCell>Genre</TableCell>
+                        <TableCell>Rating</TableCell>
+                        <TableCell>Review</TableCell>
+                        <TableCell>Image Url</TableCell>
+                        <TableCell>Action</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {
+                        movies !== null && movies.map((item,index)=>{
+                            return(
+                                <TableRow key={index}>
+                                    <TableCell>{index+1}</TableCell>
+                                    <TableCell>{item.title}</TableCell>
+                                    <TableCell>{item.description}</TableCell>
+                                    <TableCell>{item.year}</TableCell>
+                                    <TableCell>{item.duration}</TableCell>
+                                    <TableCell>{item.genre}</TableCell>
+                                    <TableCell>{item.rating}</TableCell>
+                                    <TableCell>{item.review}</TableCell>
+                                    <TableCell>{item.image_url}</TableCell>
+                                    <TableCell>
+                                        <Action movieId={item.id}/>
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        })
+                    }
+                </TableBody>
+            </Table>
+        </Fragment>
+        
+        <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 className={classes.modal}
@@ -255,7 +325,7 @@ const MovieData = ()=>{
             >
                 <Fade in={open}>
                 <div className={classes.paper}>
-                    <Title>Movie Form</Title>
+                    <Typography componecomponent="h2" variant="h4" color="primary" gutterBottomnt >Movie Form</Typography>
                     <form onSubmit={handleSubmit} className={classes.form} noValidate>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
@@ -363,72 +433,10 @@ const MovieData = ()=>{
                         </Grid>
                         
                     </form>
+            
                 </div>
                 </Fade>
             </Modal>
-            </>
-        )
-    }
-
-
-
-    return(
-        <>
-        <Fragment>
-            <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                    <Title>Movie List</Title>
-                </Grid>
-                <Grid item xs={12} sm={6} alignItems="flex-end">
-                    <Button 
-                    variant='outlined' 
-                    color='inherit' 
-                    className={classes.button}
-                    onClick={()=>handleOpen('create')}><PlusIcon/></Button>
-                </Grid>
-            </Grid>
-            
-            
-            <Table size='medium'>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>No</TableCell>
-                        <TableCell>Title</TableCell>
-                        <TableCell>Description</TableCell>
-                        <TableCell>Year</TableCell>
-                        <TableCell>Duration</TableCell>
-                        <TableCell>Genre</TableCell>
-                        <TableCell>Rating</TableCell>
-                        <TableCell>Review</TableCell>
-                        <TableCell>Image Url</TableCell>
-                        <TableCell>Action</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {
-                        movies !== null && movies.map((item,index)=>{
-                            return(
-                                <TableRow key={index}>
-                                    <TableCell>{index+1}</TableCell>
-                                    <TableCell>{item.title}</TableCell>
-                                    <TableCell>{item.description}</TableCell>
-                                    <TableCell>{item.year}</TableCell>
-                                    <TableCell>{item.duration}</TableCell>
-                                    <TableCell>{item.genre}</TableCell>
-                                    <TableCell>{item.rating}</TableCell>
-                                    <TableCell>{item.review}</TableCell>
-                                    <TableCell>{item.image_url}</TableCell>
-                                    <TableCell>
-                                        <Action movieId={item.id}/>
-                                    </TableCell>
-                                </TableRow>
-                            )
-                        })
-                    }
-                </TableBody>
-            </Table>
-        </Fragment>
-        <ModalForm/>
         </>
     )
 }

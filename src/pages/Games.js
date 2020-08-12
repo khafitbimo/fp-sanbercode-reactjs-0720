@@ -25,11 +25,11 @@ const styles = theme => ({
 
  
 
-class Movies extends Component{
+class Games extends Component{
     constructor(props){
         super(props);
         this.state = {
-            movies : [],
+            games : [],
             searchNodes:""
         }
         
@@ -37,15 +37,15 @@ class Movies extends Component{
 
     
     componentDidMount(){
-        this.getMovie();
+        this.getGames();
     }
 
-    getMovie(){
-        axios.get(`https://backendexample.sanbersy.com/api/movies`)
+    getGames(){
+        axios.get(`https://backendexample.sanbersy.com/api/games`)
             .then(res => {
                 res.data.map(el=>{
                     this.setState({
-                        movies : [...this.state.movies,{
+                        games : [...this.state.games,{
                             id : el.id,
                             title : el.title,
                             description : el.description,
@@ -66,7 +66,7 @@ class Movies extends Component{
         return(
             <>
             
-            {this.state.movies.map((el,index)=>{
+            {this.state.games.map((el,index)=>{
                 return(
                     <Grid item xs={12}>
                     <CardActionArea component="a" href="#">
@@ -102,4 +102,4 @@ class Movies extends Component{
     }
 }
 
-export default withStyles(styles, { withTheme: true })(Movies);
+export default withStyles(styles, { withTheme: true })(Games);

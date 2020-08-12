@@ -1,15 +1,20 @@
-import React, { useState,createContext } from 'react';
+import React, { useState,createContext,useEffect } from 'react';
+import axios from 'axios'
 
 export const UserContext = createContext();
 
 export const UserProvider = props=>{
-    const [user,setUser] = useState(null);
+    const [apiUser] = useState('https://www.backendexample.sanbersy.com/api/users')
+    const [users,setUsers] = useState(null);
+    const [isLogin,setIsLogin] = useState(false);
+    const [inputUser,setInputUser] = useState({username:"",password:""})
+    
 
     useEffect( () => {
-        if (user === null){
-          axios.get(`https://www.backendexample.sanbersy.com/api/movies`)
+        if (users === null){
+          axios.get(apiUser)
           .then(res => {
-            setUser(res.data.map(el=>{ return {
+            setUsers(res.data.map(el=>{ return {
                 id: el.id, 
                 created_at: el.created_at, 
                 updated_at: el.updated_at,
@@ -19,10 +24,10 @@ export const UserProvider = props=>{
             }))
           })
         }
-      }, [user])
+      }, [users])
 
     return(
-        <UserContext.Provider value = {[user,setUser]}>
+        <UserContext.Provider value = {[apiUser,users,setUsers,isLogin,setIsLogin,inputUser,setInputUser]}>
             {props.children}
         </UserContext.Provider>
     )
