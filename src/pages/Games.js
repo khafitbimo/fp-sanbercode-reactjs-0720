@@ -47,14 +47,12 @@ class Games extends Component{
                     this.setState({
                         games : [...this.state.games,{
                             id : el.id,
-                            title : el.title,
-                            description : el.description,
-                            year : el.year,
-                            duration : el.duration,
+                            name : el.name,
                             genre : el.genre,
-                            rating : el.rating,
-                            review : el.review,
-                            image_url : el.image_url
+                            singlePlayer : el.singlePlayer,
+                            multiPlayer : el.multiPlayer,
+                            platform : el.platform,
+                            release : el.release,
                         }]
                     })
               } )
@@ -74,21 +72,21 @@ class Games extends Component{
                         <div className={classes.cardDetails}>
                             <CardContent>
                             <Typography component="h2" variant="h5" color='primary'>
-                                {el.title}
+                                {el.name}
                             </Typography>
                             <Typography variant="subtitle1" color="textSecondary">
-                                {el.year}
+                                {el.genre}
                             </Typography>
                             <Typography variant="subtitle1" paragraph>
-                                {el.description}
+                                {el.platform}
                             </Typography>
                             <Typography variant="subtitle1" color="primary">
-                                {el.review}
+                                {el.release}
                             </Typography>
                             </CardContent>
                         </div>
                         <Hidden xsDown>
-                            <CardMedia className={classes.cardMedia} image={el.image_url}  />
+                            <CardMedia className={classes.cardMedia}  />
                         </Hidden>
                         </Card>
                     </CardActionArea>

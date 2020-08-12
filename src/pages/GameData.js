@@ -11,16 +11,15 @@ const GameData = ()=>{
     const [apiGame] = useState('https://backendexample.sanbersy.com/api/games')
     const [games,setGames] = useState(null);
     const [inputGame,setInputGame] = useState({
-        id: 0,
-        created_at: "",
+        id : 0,
+        created_at : "",
         updated_at: "",
-        title: "",
-        description: "",
-        year: (new Date()).getFullYear(),
-        duration: 0,
-        genre: "",
-        rating: 0,
-        image_url: ""
+        name : "",
+        genre : "",
+        singlePlayer : true,
+        multiPlayer : true,
+        platform : "",
+        release : (new Date()).getFullYear(),
     })
 
     const [selectedId,setSelectedId] = useState(0)
@@ -61,16 +60,15 @@ const GameData = ()=>{
           .then(res => {
             setGames(res.data.map(el=>{ 
                 return {
-                    id: el.id,
-                    created_at: el.created_at,
-                    updated_at: el.updated_at,
-                    title: el.title,
-                    description: el.description,
-                    year: el.year,
-                    duration: el.duration,
-                    genre: el.genre,
-                    rating: el.rating,
-                    image_url: el.image_url
+                    id : el.id,
+                    created_at : el.created_at,
+                    updated_at : el.updated_at,
+                    name : el.name,
+                    genre : el.genre,
+                    singlePlayer : el.singlePlayer,
+                    multiPlayer : el.multiPlayer,
+                    platform : el.platform,
+                    release : el.release,
                 }
             }))
           })
@@ -79,21 +77,19 @@ const GameData = ()=>{
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (inputGame.title.replace(/\s/g,'') === '') {
+        if (inputGame.name.replace(/\s/g,'') === '') {
             return
         }
 
         if(statusForm === 'create'){
             axios.post(apiGame,{
                 created_at : new Date(),
-                title : inputGame.title,
-                description : inputGame.description,
-                year : parseInt(inputGame.year),
-                duration : parseInt(inputGame.duration),
+                name : inputGame.name,
                 genre : inputGame.genre,
-                rating : parseInt(inputGame.rating),
-                review : inputGame.review,
-                image_url : inputGame.image_url
+                singlePlayer : inputGame.singlePlayer,
+                multiPlayer : inputGame.multiPlayer,
+                platform : inputGame.platform,
+                release : parseInt(inputGame.year)
             })
             .then(res => {
                 setGames([...games,{
@@ -105,25 +101,21 @@ const GameData = ()=>{
             
             axios.put(`${apiGame}/${selectedId}`, {
                 updated_at : new Date(),
-                title : inputGame.title,
-                description : inputGame.description,
-                year : parseInt(inputGame.year),
-                duration : parseInt(inputGame.duration),
+                name : inputGame.name,
                 genre : inputGame.genre,
-                rating : parseInt(inputGame.rating),
-                review : inputGame.review,
-                image_url : inputGame.image_url
+                singlePlayer : inputGame.singlePlayer,
+                multiPlayer : inputGame.multiPlayer,
+                platform : inputGame.platform,
+                release : parseInt(inputGame.year)
         })
         .then(res => {
             let selectedGame = games.find(el=> el.id === selectedId)
-            selectedGame.title = inputGame.title
-            selectedGame.description = inputGame.description
-            selectedGame.year = inputGame.year
-            selectedGame.duration = inputGame.duration
+            selectedGame.name = inputGame.name
             selectedGame.genre = inputGame.genre
-            selectedGame.rating = inputGame.rating
-            selectedGame.review = inputGame.review
-            selectedGame.image_url = inputGame.image_url
+            selectedGame.singlePlayer = inputGame.singlePlayer
+            selectedGame.multiPlayer = inputGame.multiPlayer
+            selectedGame.platform = inputGame.platform
+            selectedGame.release = inputGame.release
             setGames([...games])
         }).catch(error => {
             console.log(error)
@@ -133,14 +125,12 @@ const GameData = ()=>{
         setStatusForm("create")
         setSelectedId(0)
         setInputGame({
-            title: "",
-            description: "",
-            year: (new Date()).getFullYear(),
-            duration: 0,
-            genre: "",
-            rating: 0,
-            review: "",
-            image_url: ""
+            name : "",
+            genre : "",
+            singlePlayer : true,
+            multiPlayer : true,
+            platform : "",
+            release : (new Date()).getFullYear(),
         })
         setOpen(false)
 
@@ -151,29 +141,23 @@ const GameData = ()=>{
         
 
         switch (typeOfInput) {
-            case "title":
-                setInputGame({...inputGame, title: event.target.value});
-                break;
-            case "description":
-                setInputGame({...inputGame, description: event.target.value});
-                break;
-            case "year":
-                setInputGame({...inputGame, year: event.target.value});
-                break;
-            case "duration":
-                setInputGame({...inputGame, duration: event.target.value});
+            case "name":
+                setInputGame({...inputGame, name: event.target.value});
                 break;
             case "genre":
                 setInputGame({...inputGame, genre: event.target.value});
                 break;
-            case "rating":
-                setInputGame({...inputGame, rating: event.target.value});
+            case "singlePlayer":
+                setInputGame({...inputGame, singlePlayer: event.target.value});
                 break;
-            case "review":
-                setInputGame({...inputGame, review: event.target.value});
+            case "multiPlayer":
+                setInputGame({...inputGame, multiPlayer: event.target.value});
                 break;
-            case "image_url":
-                setInputGame({...inputGame, image_url: event.target.value});
+            case "platform":
+                setInputGame({...inputGame, platform: event.target.value});
+                break;
+            case "release":
+                setInputGame({...inputGame, release: event.target.value});
                 break;
         
             default:
@@ -197,14 +181,12 @@ const GameData = ()=>{
             let selectGame = games.find(el => el.id === gameId)
             console.log(gameId)
             setInputGame({
-                title: selectGame.title !== null ? selectGame.title : '' ,
-                description: selectGame.description !== null ? selectGame.description : '',
-                year: selectGame.year !== null ? selectGame.year : (new Date()).getFullYear(),
-                duration: selectGame.duration !== null ? selectGame.duration : 120,
+                name: selectGame.name !== null ? selectGame.name : '' ,
                 genre: selectGame.genre !== null ? selectGame.genre : '',
-                rating: selectGame.rating !== null ? selectGame.rating : 0,
-                review: selectGame.review !== null ? selectGame.review : '',
-                image_url: selectGame.image_url !== null ? selectGame.image_url : '',
+                singlePlayer: selectGame.singlePlayer !== null ? selectGame.singlePlayer : 1,
+                multiPlayer: selectGame.multiPlayer !== null ? selectGame.multiPlayer : 1,
+                platform: selectGame.platform !== null ? selectGame.platform : '',
+                release: selectGame.release !== null ? selectGame.release : (new Date()).getFullYear(),
             })
             setSelectedId(gameId)
             setStatusForm("edit")
@@ -259,14 +241,12 @@ const GameData = ()=>{
                 <TableHead>
                     <TableRow>
                         <TableCell>No</TableCell>
-                        <TableCell>Title</TableCell>
-                        <TableCell>Description</TableCell>
-                        <TableCell>Year</TableCell>
-                        <TableCell>Duration</TableCell>
+                        <TableCell>Name</TableCell>
                         <TableCell>Genre</TableCell>
-                        <TableCell>Rating</TableCell>
-                        <TableCell>Review</TableCell>
-                        <TableCell>Image Url</TableCell>
+                        <TableCell>Single Player</TableCell>
+                        <TableCell>Multi Player</TableCell>
+                        <TableCell>Platform</TableCell>
+                        <TableCell>Release</TableCell>
                         <TableCell>Action</TableCell>
                     </TableRow>
                 </TableHead>
@@ -276,14 +256,12 @@ const GameData = ()=>{
                             return(
                                 <TableRow key={index}>
                                     <TableCell>{index+1}</TableCell>
-                                    <TableCell>{item.title}</TableCell>
-                                    <TableCell>{item.description}</TableCell>
-                                    <TableCell>{item.year}</TableCell>
-                                    <TableCell>{item.duration}</TableCell>
+                                    <TableCell>{item.name}</TableCell>
                                     <TableCell>{item.genre}</TableCell>
-                                    <TableCell>{item.rating}</TableCell>
-                                    <TableCell>{item.review}</TableCell>
-                                    <TableCell>{item.image_url}</TableCell>
+                                    <TableCell>{item.singlePlayer}</TableCell>
+                                    <TableCell>{item.multiPlayer}</TableCell>
+                                    <TableCell>{item.platform}</TableCell>
+                                    <TableCell>{item.release}</TableCell>
                                     <TableCell>
                                         <Action gameId={item.id}/>
                                     </TableCell>
@@ -313,42 +291,18 @@ const GameData = ()=>{
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                             <TextField
-                                name="title"
+                                name="name"
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="title"
-                                label="Title"
+                                id="name"
+                                label="Name"
                                 autoFocus
-                                value={inputGame.title}
+                                value={inputGame.name}
                                 onChange={handleChange}
                             />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="year"
-                                label="Year"
-                                type="number"
-                                name="year"
-                                value={inputGame.year}
-                                onChange={handleChange}
-                            />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                name="duration"
-                                type="number"
-                                label="Duration"
-                                id="duration"
-                                value={inputGame.duration}
-                                onChange={handleChange}
-                            />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
                                 fullWidth
@@ -363,48 +317,47 @@ const GameData = ()=>{
                             <TextField
                                 variant="outlined"
                                 fullWidth
-                                name="rating"
+                                name="singlePlayer"
+                                label="Single Player"
+                                id="singlePlayer"
+                                value={inputGame.singlePlayer}
+                                onChange={handleChange}
+                            />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                            <TextField
+                                variant="outlined"
+                                fullWidth
+                                id="multiPlayer"
+                                label="Multi Player"
+                                name="multiPlayer"
+                                value={inputGame.multiPlayer}
+                                onChange={handleChange}
+                            />
+                            </Grid>
+                            <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                fullWidth
+                                name="platform"
+                                label="Platform"
+                                id="platform"
+                                value={inputGame.platform}
+                                onChange={handleChange}
+                            />
+                            </Grid>
+                            <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                fullWidth
+                                id="release"
                                 type="number"
-                                label="Rating"
-                                id="rating"
-                                value={inputGame.rating}
+                                label="Release"
+                                name="release"
+                                value={inputGame.release}
                                 onChange={handleChange}
                             />
                             </Grid>
-                            <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="description"
-                                label="Description"
-                                name="description"
-                                value={inputGame.description}
-                                onChange={handleChange}
-                            />
-                            </Grid>
-                            <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="review"
-                                label="Review"
-                                name="review"
-                                value={inputGame.review}
-                                onChange={handleChange}
-                            />
-                            </Grid>
-                            <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="image_url"
-                                label="Image"
-                                name="image_url"
-                                value={inputGame.image_url}
-                                onChange={handleChange}
-                            />
-                            </Grid>
-                            
                             <Button
                             type="submit"
                             variant="contained"

@@ -7,12 +7,14 @@ import Movies from './pages/Movies'
 import Main from './layout/Main'
 import SignIn from './layout/SignIn'
 import SignUp from './layout/SignUp'
+import Games from './pages/Games'
+import GamesData from './pages/GameData'
 
 function App() {
   return (
     <>
     <UserProvider>
-    <SignUp/>
+    <GamesData/>
     </UserProvider>
     
     </>
