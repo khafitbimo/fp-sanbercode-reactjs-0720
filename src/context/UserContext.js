@@ -10,21 +10,21 @@ export const UserProvider = props=>{
     const [inputUser,setInputUser] = useState({username:"",password:""})
     
 
-    useEffect( () => {
-        if (users === null){
-          axios.get(apiUser)
-          .then(res => {
-            setUsers(res.data.map(el=>{ return {
-                id: el.id, 
-                created_at: el.created_at, 
-                updated_at: el.updated_at,
-                username: el.username,
-                password: el.password
-              }
-            }))
-          })
-        }
-      }, [users])
+    // useEffect( () => {
+    //     if (users === null){
+    //       axios.get(apiUser)
+    //       .then(res => {
+    //         setUsers(res.data.map(el=>{ return {
+    //             id: el.id, 
+    //             created_at: el.created_at, 
+    //             updated_at: el.updated_at,
+    //             username: el.username,
+    //             password: el.password
+    //           }
+    //         }))
+    //       })
+    //     }
+    //   }, [users])
 
     return(
         <UserContext.Provider value = {[apiUser,users,setUsers,isLogin,setIsLogin,inputUser,setInputUser]}>

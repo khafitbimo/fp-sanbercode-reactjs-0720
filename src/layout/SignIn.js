@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {UserContext} from '../context/UserContext'
+import { useHistory } from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -49,8 +50,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SignIn = () => {
-    const [,users,setUsers,isLogin,setIsLogin,inputUser,setInputUser] = useContext(UserContext);
+    const [apiUser,users,setUsers,isLogin,setIsLogin,inputUser,setInputUser] = useContext(UserContext);
     const [messages,setMessages] = useState("");
+    const history = useHistory()
 
     const classes = useStyles();
 
@@ -62,21 +64,31 @@ const SignIn = () => {
           return
         }
 
-        let selectUser = users.find(el => el.username === inputUser.username)
+        axios.post(`https://backendexample.sanbersy.com/api/login`,{
+          username : inputUser.username,
+          password : inputUser.password
+        })
+        .then(res => {
+            setUsers({
+                id: res.data.id,
+                created_at: res.data.created_at, 
+                updated_at: res.data.updated_at,
+                username: res.data.username,
+                password: res.data.password
+              })
+              
+              
+              if (res.data.id) {
+                setIsLogin(true)
+                setMessages("")
+                history.goBack()
+              }else{
+                setIsLogin(false)
+                setMessages(res.data)
+              }
+            
+        })
 
-        
-        if (selectUser === undefined) {
-          setMessages("Wrong Username or Password")
-          return
-        }
-
-        if (selectUser.password !== inputUser.password) {
-          setMessages("Wrong Username or Password")
-          return
-        }
-        
-        setIsLogin(true)
-        setMessages("")
       }
 
       const handleChange = (event) => {

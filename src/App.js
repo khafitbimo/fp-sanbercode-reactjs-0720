@@ -1,7 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {UserContext, UserProvider} from './context/UserContext'
+import {UserProvider} from './context/UserContext'
+import {AppProvider} from './context/AppContext'
 import MovieData from './pages/MovieData'
 import Movies from './pages/Movies'
 import Main from './layout/Main'
@@ -14,7 +15,7 @@ function App() {
   return (
     <>
     <UserProvider>
-    <GamesData/>
+      <Main/>
     </UserProvider>
     
     </>

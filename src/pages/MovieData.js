@@ -6,22 +6,12 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import PlusIcon from '@material-ui/icons/Add'
+import {AppContext} from '../context/AppContext'
 
 const MovieData = ()=>{
-    const [apiMovie] = useState('https://backendexample.sanbersy.com/api/movies')
-    const [movies,setMovies] = useState(null);
-    const [inputMovie,setInputMovie] = useState({
-        id: 0,
-        created_at: "",
-        updated_at: "",
-        title: "",
-        description: "",
-        year: (new Date()).getFullYear(),
-        duration: 0,
-        genre: "",
-        rating: 0,
-        image_url: ""
-    })
+    const {userContext,movieContext,gameContext,drawerContext} = useContext(AppContext)
+
+    const [apiMovie,movies,setMovies,inputMovie,setInputMovie] = movieContext
 
     const [selectedId,setSelectedId] = useState(0)
     const [statusForm,setStatusForm] = useState("create")

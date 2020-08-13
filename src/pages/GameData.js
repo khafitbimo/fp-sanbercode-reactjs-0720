@@ -6,21 +6,12 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import PlusIcon from '@material-ui/icons/Add'
 import Typography from '@material-ui/core/Typography';
+import {AppContext} from '../context/AppContext'
 
 const GameData = ()=>{
-    const [apiGame] = useState('https://backendexample.sanbersy.com/api/games')
-    const [games,setGames] = useState(null);
-    const [inputGame,setInputGame] = useState({
-        id : 0,
-        created_at : "",
-        updated_at: "",
-        name : "",
-        genre : "",
-        singlePlayer : true,
-        multiPlayer : true,
-        platform : "",
-        release : (new Date()).getFullYear(),
-    })
+    const {userContext,movieContext,gameContext,drawerContext} = useContext(AppContext)
+
+    const [apiGame,games,setGames,inputGame,setInputGame] = gameContext
 
     const [selectedId,setSelectedId] = useState(0)
     const [statusForm,setStatusForm] = useState("create")
