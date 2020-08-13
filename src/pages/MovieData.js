@@ -6,12 +6,10 @@ import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import PlusIcon from '@material-ui/icons/Add'
-import {AppContext} from '../context/AppContext'
+import {MovieContext} from '../context/MovieContext'
 
 const MovieData = ()=>{
-    const {userContext,movieContext,gameContext,drawerContext} = useContext(AppContext)
-
-    const [apiMovie,movies,setMovies,inputMovie,setInputMovie] = movieContext
+    const [apiMovie,movies,setMovies,inputMovie,setInputMovie] = useContext(MovieContext)
 
     const [selectedId,setSelectedId] = useState(0)
     const [statusForm,setStatusForm] = useState("create")
@@ -44,28 +42,6 @@ const MovieData = ()=>{
     ))
 
     const classes = useStyle();
-
-    useEffect( () => {
-        if (movies === null){
-          axios.get(apiMovie)
-          .then(res => {
-            setMovies(res.data.map(el=>{ 
-                return {
-                    id: el.id,
-                    created_at: el.created_at,
-                    updated_at: el.updated_at,
-                    title: el.title,
-                    description: el.description,
-                    year: el.year,
-                    duration: el.duration,
-                    genre: el.genre,
-                    rating: el.rating,
-                    image_url: el.image_url
-                }
-            }))
-          })
-        }
-      }, [movies])
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -271,8 +247,8 @@ const MovieData = ()=>{
                         <TableCell>Duration</TableCell>
                         <TableCell>Genre</TableCell>
                         <TableCell>Rating</TableCell>
-                        <TableCell>Review</TableCell>
-                        <TableCell>Image Url</TableCell>
+                        {/* <TableCell>Review</TableCell>
+                        <TableCell>Image Url</TableCell> */}
                         <TableCell>Action</TableCell>
                     </TableRow>
                 </TableHead>
@@ -288,8 +264,8 @@ const MovieData = ()=>{
                                     <TableCell>{item.duration}</TableCell>
                                     <TableCell>{item.genre}</TableCell>
                                     <TableCell>{item.rating}</TableCell>
-                                    <TableCell>{item.review}</TableCell>
-                                    <TableCell>{item.image_url}</TableCell>
+                                    {/* <TableCell>{item.review}</TableCell>
+                                    <TableCell>{item.image_url}</TableCell> */}
                                     <TableCell>
                                         <Action movieId={item.id}/>
                                     </TableCell>

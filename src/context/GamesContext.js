@@ -42,8 +42,8 @@ export const GamesProvider = props=>{
       }, [games])
 
     return(
-        <MovieContext.Provider value = {[apiGame,movies,games,setGames,inputGame,setInputGame]}>
+        <GamesContext.Provider value = {[apiGame,games,setGames,inputGame,setInputGame]}>
             {props.children}
-        </MovieContext.Provider>
+        </GamesContext.Provider>
     )
 }

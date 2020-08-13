@@ -6,12 +6,10 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import PlusIcon from '@material-ui/icons/Add'
 import Typography from '@material-ui/core/Typography';
-import {AppContext} from '../context/AppContext'
+import {GamesContext} from '../context/GamesContext'
 
 const GameData = ()=>{
-    const {userContext,movieContext,gameContext,drawerContext} = useContext(AppContext)
-
-    const [apiGame,games,setGames,inputGame,setInputGame] = gameContext
+    const [apiGame,games,setGames,inputGame,setInputGame] = useContext(GamesContext)
 
     const [selectedId,setSelectedId] = useState(0)
     const [statusForm,setStatusForm] = useState("create")
@@ -45,26 +43,7 @@ const GameData = ()=>{
 
     const classes = useStyle();
 
-    useEffect( () => {
-        if (games === null){
-          axios.get(apiGame)
-          .then(res => {
-            setGames(res.data.map(el=>{ 
-                return {
-                    id : el.id,
-                    created_at : el.created_at,
-                    updated_at : el.updated_at,
-                    name : el.name,
-                    genre : el.genre,
-                    singlePlayer : el.singlePlayer,
-                    multiPlayer : el.multiPlayer,
-                    platform : el.platform,
-                    release : el.release,
-                }
-            }))
-          })
-        }
-      }, [games])
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
