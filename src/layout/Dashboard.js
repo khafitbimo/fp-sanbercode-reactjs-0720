@@ -145,13 +145,18 @@ const Dashboard= ({match}) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleSignOut = () => {
+    setUsers(null)
+    localStorage.removeItem("user")
+  }
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   const LoginMenu = ({user, ...props}) => {
     return(
         <>{
           user ?
-          <Button color="inherit" variant="outlined" onClick={()=>setUsers(null)} >Logout</Button>
+          <Button color="inherit" variant="outlined" onClick={handleSignOut} >Logout</Button>
           : <Button component={ LinkRouter } to={`${match.path}signin`} color="inherit" variant="outlined">Login</Button>
            
           }

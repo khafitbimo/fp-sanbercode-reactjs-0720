@@ -68,7 +68,7 @@ class Movies extends Component{
             
             {this.state.movies.map((el,index)=>{
                 return(
-                    <Grid item xs={12}>
+                    <Grid item xs={12} key={index}>
                     <CardActionArea component="a" href="#">
                         <Card className={classes.card}>
                         <div className={classes.cardDetails}>

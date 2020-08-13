@@ -14,7 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {UserContext} from '../context/UserContext'
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
+import {BrowserRouter as Router,Switch, Route,Link as LinkRouter } from "react-router-dom"
 
 function Copyright() {
   return (
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SignIn = () => {
     const [apiUser,users,setUsers,isLogin,setIsLogin,inputUser,setInputUser] = useContext(UserContext);
+    const [redirect,setRedirect] = useState(false)
     const [messages,setMessages] = useState("");
     const history = useHistory()
 
@@ -70,9 +72,6 @@ const SignIn = () => {
         })
         .then(res => {
             setUsers({
-                id: res.data.id,
-                created_at: res.data.created_at, 
-                updated_at: res.data.updated_at,
                 username: res.data.username,
                 password: res.data.password
               })
@@ -81,15 +80,24 @@ const SignIn = () => {
               if (res.data.id) {
                 setIsLogin(true)
                 setMessages("")
-                history.goBack()
+                localStorage.setItem("user", JSON.stringify({username: res.data.username, password: res.data.password}))
+                
+                setRedirect(true)
               }else{
                 setIsLogin(false)
+                setRedirect(false)
                 setMessages(res.data)
               }
             
         })
-
+        setInputUser({
+          username : "",
+          password : ""
+        })
+        setMessages("")
       }
+
+
 
       const handleChange = (event) => {
         let typeOfInput = event.target.name
@@ -107,6 +115,10 @@ const SignIn = () => {
       }
 
       return(
+        <>
+        {
+          redirect ? <Redirect to='/' />:null
+        }
         <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -166,7 +178,7 @@ const SignIn = () => {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link component={LinkRouter} to="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
@@ -177,7 +189,9 @@ const SignIn = () => {
           <Copyright />
         </Box>
       </Container>
-      )
+      
+        </>
+        )
 }
 
 export default SignIn

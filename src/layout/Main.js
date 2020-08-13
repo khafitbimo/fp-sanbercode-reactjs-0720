@@ -6,6 +6,8 @@ import SignUp from './SignUp'
 
 
 const Main = () =>{
+
+    
   return(
     <>
     <Router>
