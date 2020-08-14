@@ -1,7 +1,7 @@
-import React, {useContext,useState,useEffect, Fragment} from 'react'
+import React, {useContext,useState, Fragment} from 'react'
 import axios from 'axios'
 import { makeStyles, Table, TableHead, TableRow, TableCell, TableBody, Button,Modal,Backdrop,Fade, 
-    FormControlLabel,InputLabel,Input,FormHelperText,Grid,TextField,Checkbox,Link  } from '@material-ui/core';
+    Grid,TextField,Checkbox  } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import PlusIcon from '@material-ui/icons/Add'
@@ -44,8 +44,6 @@ const GameData = ()=>{
     
 
     const classes = useStyle();
-
-    
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -131,6 +129,9 @@ const GameData = ()=>{
             case "release":
                 setInputGame({...inputGame, release: event.target.value});
                 break;
+            case "image_url":
+                setInputGame({...inputGame, image_url: event.target.value});
+                break;
         
             default:
                 break;
@@ -139,7 +140,7 @@ const GameData = ()=>{
 
     const Action = ({gameId}) => {
         const handleDelete = () => {
-            let newGames = games.filter(el => el.id != gameId)
+            let newGames = games.filter(el => el.id !== gameId)
 
             axios.delete(`${apiGame}/${gameId}`)
             .then(res => {
@@ -203,42 +204,42 @@ const GameData = ()=>{
                      }else{
                          return (a.name.toUpperCase() < b.name.toUpperCase()) ? 1 : ((b.name.toUpperCase() < a.name.toUpperCase()) ? -1 : 0);
                      }
-                     break;
+                     
                  case "genre":
                      if (sortType) {
                          return (a.genre.toUpperCase() > b.genre.toUpperCase()) ? 1 : ((b.genre.toUpperCase() > a.genre.toUpperCase()) ? -1 : 0);
                      }else{
                          return (a.genre.toUpperCase() < b.genre.toUpperCase()) ? 1 : ((b.genre.toUpperCase() < a.genre.toUpperCase()) ? -1 : 0);
                      }
-                     break;
+                     
                  case "singlePlayer":
                      if (sortType) {
                          return (a.singlePlayer > b.singlePlayer) ? 1 : ((b.singlePlayer > a.singlePlayer) ? -1 : 0);
                      }else{
                          return (a.singlePlayer < b.singlePlayer) ? 1 : ((b.singlePlayer < a.singlePlayer) ? -1 : 0);
                      }
-                     break;
+                    
                  case "multiPlayer":
                      if (sortType) {
                          return (a.multiPlayer > b.multiPlayer) ? 1 : ((b.multiPlayer > a.multiPlayer) ? -1 : 0);
                      }else{
                          return (a.multiPlayer < b.multiPlayer) ? 1 : ((b.multiPlayer < a.multiPlayer) ? -1 : 0);
                      }
-                     break;
+                     
                  case "platform":
                      if (sortType) {
                          return (a.platform.toUpperCase() > b.platform.toUpperCase()) ? 1 : ((b.platform.toUpperCase() > a.platform.toUpperCase()) ? -1 : 0);
                      }else{
                          return (a.platform.toUpperCase() < b.platform.toUpperCase()) ? 1 : ((b.platform.toUpperCase() < a.platform.toUpperCase()) ? -1 : 0);
                      }
-                     break;
+                     
                  case "release":
                      if (sortType) {
                          return (a.release.toUpperCase() > b.release.toUpperCase()) ? 1 : ((b.release.toUpperCase() > a.release.toUpperCase()) ? -1 : 0);
                      }else{
                          return (a.release.toUpperCase() < b.release.toUpperCase()) ? 1 : ((b.release.toUpperCase() < a.release.toUpperCase()) ? -1 : 0);
                      }
-                     break;
+                     
              
                  default:
                      break;
@@ -386,13 +387,24 @@ const GameData = ()=>{
                                 onChange={handleChange}
                             />
                             </Grid>
+                            <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                fullWidth
+                                id="image_url"
+                                label="Image Url"
+                                name="image_url"
+                                value={inputGame.image_url}
+                                onChange={handleChange}
+                            />
+                            </Grid>
                             <Button
                             type="submit"
                             variant="contained"
                             color="primary"
                             className={classes.submit}
                             >
-                                {statusForm == 'create' ? 'Save' : 'Update'}
+                                {statusForm === 'create' ? 'Save' : 'Update'}
                             </Button>
                         </Grid>
                         

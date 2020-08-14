@@ -1,4 +1,4 @@
-import React,{useState,useEffect, useContext} from 'react';
+import React,{useState, useContext} from 'react';
 import axios from 'axios'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -14,8 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {UserContext} from '../context/UserContext'
-import { useHistory, Redirect } from 'react-router-dom';
-import {BrowserRouter as Router,Switch, Route,Link as LinkRouter } from "react-router-dom"
+import {  Redirect } from 'react-router-dom';
+import {Link as LinkRouter } from "react-router-dom"
 
 function Copyright() {
   return (
@@ -51,10 +51,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SignIn = () => {
-    const [apiUser,users,setUsers,isLogin,setIsLogin,inputUser,setInputUser] = useContext(UserContext);
+    const [,,setUsers,inputUser,setInputUser] = useContext(UserContext);
     const [redirect,setRedirect] = useState(false)
     const [messages,setMessages] = useState("");
-    const history = useHistory()
 
     const classes = useStyles();
 
@@ -78,13 +77,10 @@ const SignIn = () => {
               
               
               if (res.data.id) {
-                setIsLogin(true)
                 setMessages("")
                 localStorage.setItem("user", JSON.stringify({username: res.data.username, password: res.data.password}))
-                
                 setRedirect(true)
               }else{
-                setIsLogin(false)
                 setRedirect(false)
                 setMessages(res.data)
               }
@@ -96,8 +92,6 @@ const SignIn = () => {
         })
         setMessages("")
       }
-
-
 
       const handleChange = (event) => {
         let typeOfInput = event.target.name

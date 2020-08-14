@@ -1,4 +1,4 @@
-import React,{Component,usestate} from 'react';
+import React,{Component} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -8,6 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Hidden from '@material-ui/core/Hidden';
 import axios from 'axios';
+import {Link as LinkRouter} from 'react-router-dom'
 
 
 const styles = theme => ({
@@ -35,7 +36,6 @@ class Movies extends Component{
         
     }
 
-    
     componentDidMount(){
         this.getMovie();
     }
@@ -79,11 +79,11 @@ class Movies extends Component{
                             <Typography variant="subtitle1" color="textSecondary">
                                 {el.year}
                             </Typography>
-                            <Typography variant="subtitle1" paragraph>
-                                {el.description}
+                            <Typography variant="subtitle1" color="textSecondary">
+                                {el.genre}
                             </Typography>
-                            <Typography variant="subtitle1" color="primary">
-                                {el.review}
+                            <Typography variant="subtitle1" color="secondary" component={LinkRouter} to={`/movies/${el.id}`}>
+                                Continue Reading...
                             </Typography>
                             </CardContent>
                         </div>

@@ -22,7 +22,7 @@ const useStyle = makeStyles((theme)=>({
 
 const MovieForm = ({match}) => {
     const [apiMovie,movies,setMovies,inputMovie,setInputMovie,statusForm,setStatusForm] = useContext(MovieContext)
-    const [redirect,setRedirect] = useState(false)
+    const [redirect] = useState(false)
     
     const classes = useStyle();
     const moviesId = parseInt(match.params.moviesId)
@@ -278,7 +278,7 @@ const MovieForm = ({match}) => {
                         color="primary"
                         className={classes.submit}
                         >
-                            {statusForm == 'create' ? 'Save' : 'Update'}
+                            {statusForm === 'create' ? 'Save' : 'Update'}
                         </Button>
                     </Grid>
                     

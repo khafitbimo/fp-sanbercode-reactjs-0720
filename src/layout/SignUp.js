@@ -1,11 +1,9 @@
-import React,{useState,useContext,useEffect} from 'react';
+import React,{useState,useContext} from 'react';
 import axios from 'axios'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -14,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {UserContext} from '../context/UserContext'
-import {BrowserRouter as Router,Switch, Route,Link as LinkRouter,useHistory,Redirect } from "react-router-dom"
+import {Link as LinkRouter,useHistory,Redirect } from "react-router-dom"
 
 function Copyright() {
     return (
@@ -51,7 +49,7 @@ function Copyright() {
   }));
 
   const SignUp = () => {
-    const [apiUser,users,setUsers,isLogin,setIsLogin,inputUser,setInputUser] = useContext(UserContext);
+    const [apiUser,,setUsers,inputUser,setInputUser] = useContext(UserContext);
     const [redirect,setRedirect] = useState(false)
     const [messages,setMessages] = useState("");
     const classes = useStyles();
@@ -83,7 +81,6 @@ function Copyright() {
                   setRedirect(true)
                   history.goBack()
                 }else{
-                  setIsLogin(false)
                   setRedirect(false)
                   setMessages(res.data)
                 }

@@ -16,6 +16,7 @@ export const GamesProvider = props=>{
         multiPlayer : true,
         platform : "",
         release : (new Date()).getFullYear(),
+        image_url : ""
     })
 
     
@@ -35,6 +36,7 @@ export const GamesProvider = props=>{
                     multiPlayer : el.multiPlayer,
                     platform : el.platform,
                     release : el.release,
+                    image_url : el.image_url
                 }
             }))
           })

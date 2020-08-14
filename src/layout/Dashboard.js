@@ -1,5 +1,5 @@
 import React,{useContext,useState} from 'react';
-import {BrowserRouter as Router,Switch, Route,Link as LinkRouter } from "react-router-dom"
+import {Route,Link as LinkRouter } from "react-router-dom"
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,14 +11,10 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -27,7 +23,6 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import MovieIcon from '@material-ui/icons/Movie';
 import GamesIcon from '@material-ui/icons/Games';
 import PersonIcon from '@material-ui/icons/Person';
-import LayersIcon from '@material-ui/icons/Layers';
 import KeyIcon from '@material-ui/icons/VpnKey';
 import { Button } from '@material-ui/core';
 import Home from '../pages/Home'
@@ -36,6 +31,8 @@ import Movies from '../pages/Movies'
 import GameData from '../pages/GameData'
 import MovieData from '../pages/MovieData'
 import MovieForm from '../pages/MovieForm'
+import Movie from '../pages/Movie'
+import Game from '../pages/Game'
 import {UserContext} from '../context/UserContext'
 import {MovieProvider} from '../context/MovieContext'
 import {GamesProvider} from '../context/GamesContext'
@@ -138,8 +135,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard= ({match}) => {
   const classes = useStyles();
-  const [apiUser,users,setUsers,isLogin,setIsLogin,inputUser,setInputUser] = useContext(UserContext);
-  const [open, setOpen] = React.useState(true);
+  const [,users,setUsers,,] = useContext(UserContext);
+  const [open, setOpen] = useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -151,7 +148,6 @@ const Dashboard= ({match}) => {
     setUsers(null)
     localStorage.removeItem("user")
   }
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   const LoginMenu = ({user, ...props}) => {
     return(
@@ -267,22 +263,21 @@ const SecondaryListItems = () => {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
             
-              <GamesProvider>
-              <Route exact path={`${match.path}games-list`} component={GameData}/>
-              </GamesProvider>
-                
-              <MovieProvider>
-              <Route exact path={`${match.path}movies-list`} component={MovieData}/>
-              </MovieProvider>
-             
-              <MovieProvider>
-              <Route path={`${match.path}movies-list/:statusForm/:moviesId?`} component={MovieForm}/>
-              </MovieProvider>
-              
+          <GamesProvider>
+            <Route exact path={`${match.path}games-list`} component={GameData}/>
+            <Route path={`${match.path}games/:gamesId`} component={Game}/>
+          </GamesProvider>
 
-              <Route exact path={`${match.path}games`} component={Games}/>
-              <Route exact path={`${match.path}movies`} component={Movies}/>
-              <Route exact path={`${match.path}`} component={Home}/>
+          <MovieProvider>
+            <Route exact path={`${match.path}movies-list`} component={MovieData}/>
+            <Route path={`${match.path}movies-list/:statusForm/:moviesId?`} component={MovieForm}/>
+            <Route path={`${match.path}movies/:moviesId`} component={Movie}/>
+          </MovieProvider>
+          
+
+          <Route exact path={`${match.path}games`} component={Games}/>
+          <Route exact path={`${match.path}movies`} component={Movies}/>
+          <Route exact path={`${match.path}`} component={Home}/>
           
             
           <Box pt={4}>

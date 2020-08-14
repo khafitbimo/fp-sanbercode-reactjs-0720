@@ -1,7 +1,7 @@
 import React, {useContext,useState,useEffect, Fragment} from 'react'
 import axios from 'axios'
-import { makeStyles, Table, TableHead, TableRow, TableCell, TableBody, Button,Modal,Backdrop,Fade, 
-    FormControlLabel,InputLabel,Input,FormHelperText,Grid,TextField,Checkbox,Link  } from '@material-ui/core';
+import { makeStyles, Table, TableHead, TableRow, TableCell, TableBody, Button, 
+    Grid  } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
@@ -41,9 +41,7 @@ const useStyle = makeStyles((theme) => (
 const MovieData = ({match})=>{
     const [apiMovie,] = useContext(MovieContext)
     const [movies,setMovies] = useState(null);
-    const [selectedId,setSelectedId] = useState(0)
     const [sortType,setSortType] = useState(true) // true : asc , false : desc
-    const [open, setOpen] = useState(false);
 
     const classes = useStyle();
 
@@ -81,42 +79,42 @@ const MovieData = ({match})=>{
                     }else{
                         return (a.title.toUpperCase() < b.title.toUpperCase()) ? 1 : ((b.title.toUpperCase() < a.title.toUpperCase()) ? -1 : 0);
                     }
-                    break;
+                   
                 case "description":
                     if (sortType) {
                         return (a.description.toUpperCase() > b.description.toUpperCase()) ? 1 : ((b.description.toUpperCase() > a.description.toUpperCase()) ? -1 : 0);
                     }else{
                         return (a.description.toUpperCase() < b.description.toUpperCase()) ? 1 : ((b.description.toUpperCase() < a.description.toUpperCase()) ? -1 : 0);
                     }
-                    break;
+                
                 case "year":
                     if (sortType) {
                         return (a.year > b.year) ? 1 : ((b.year > a.year) ? -1 : 0);
                     }else{
                         return (a.year < b.year) ? 1 : ((b.year < a.year) ? -1 : 0);
                     }
-                    break;
+                  
                 case "duration":
                     if (sortType) {
                         return (a.duration > b.duration) ? 1 : ((b.duration > a.duration) ? -1 : 0);
                     }else{
                         return (a.duration < b.duration) ? 1 : ((b.duration < a.duration) ? -1 : 0);
                     }
-                    break;
+                   
                 case "genre":
                     if (sortType) {
                         return (a.genre.toUpperCase() > b.genre.toUpperCase()) ? 1 : ((b.genre.toUpperCase() > a.genre.toUpperCase()) ? -1 : 0);
                     }else{
                         return (a.genre.toUpperCase() < b.genre.toUpperCase()) ? 1 : ((b.genre.toUpperCase() < a.genre.toUpperCase()) ? -1 : 0);
                     }
-                    break;
+                  
                 case "rating":
                     if (sortType) {
                         return (a.rating > b.rating) ? 1 : ((b.rating > a.rating) ? -1 : 0);
                     }else{
                         return (a.rating < b.rating) ? 1 : ((b.rating < a.rating) ? -1 : 0);
                     }
-                    break;
+                 
             
                 default:
                     break;
@@ -128,7 +126,7 @@ const MovieData = ({match})=>{
 
     const Action = ({movieId}) => {
         const handleDelete = () => {
-            let newMovies = movies.filter(el => el.id != movieId)
+            let newMovies = movies.filter(el => el.id !== movieId)
 
             axios.delete(`${apiMovie}/${movieId}`)
             .then(res => {
