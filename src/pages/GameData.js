@@ -8,6 +8,32 @@ import PlusIcon from '@material-ui/icons/Add'
 import Typography from '@material-ui/core/Typography';
 import {GamesContext} from '../context/GamesContext'
 
+const useStyle = makeStyles((theme) => (
+    {
+        
+        modal: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width:'50%',
+            margin: 'auto'
+        },
+        paper: {
+            backgroundColor: theme.palette.background.paper,
+            border: '2px solid #000',
+            boxShadow: theme.shadows[5],
+            padding: theme.spacing(2, 4, 3),
+        },
+        form: {
+            width: '100%', // Fix IE 11 issue.
+            marginTop: theme.spacing(3),
+        },
+        submit: {
+            margin: theme.spacing(3, 0, 2),
+          },
+    }
+))
+
 const GameData = ()=>{
     const [apiGame,games,setGames,inputGame,setInputGame] = useContext(GamesContext)
 
@@ -15,31 +41,7 @@ const GameData = ()=>{
     const [statusForm,setStatusForm] = useState("create")
     const [open, setOpen] = useState(false);
 
-    const useStyle = makeStyles((theme) => (
-        {
-            
-            modal: {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width:'50%',
-                margin: 'auto'
-            },
-            paper: {
-                backgroundColor: theme.palette.background.paper,
-                border: '2px solid #000',
-                boxShadow: theme.shadows[5],
-                padding: theme.spacing(2, 4, 3),
-            },
-            form: {
-                width: '100%', // Fix IE 11 issue.
-                marginTop: theme.spacing(3),
-            },
-            submit: {
-                margin: theme.spacing(3, 0, 2),
-              },
-        }
-    ))
+    
 
     const classes = useStyle();
 
@@ -195,7 +197,7 @@ const GameData = ()=>{
         <Fragment>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                <Typography componecomponent="h2" variant="h4" color="primary" gutterBottomnt >Game List</Typography>
+                <Typography componecomponent="h2" variant="h4" color="primary" gutterBottom>Game List</Typography>
                 </Grid>
                 <Grid item xs={12} sm={6} alignItems="flex-end">
                     <Button 
@@ -256,7 +258,7 @@ const GameData = ()=>{
             >
                 <Fade in={open}>
                 <div className={classes.paper}>
-                <Typography componecomponent="h2" variant="h4" color="primary" gutterBottomnt >Game Form</Typography>
+                <Typography component="h2" variant="h4" color="primary" gutterBottom >Game Form</Typography>
                     <form onSubmit={handleSubmit} className={classes.form} noValidate>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>

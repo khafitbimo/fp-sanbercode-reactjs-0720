@@ -8,40 +8,47 @@ import EditIcon from '@material-ui/icons/Edit'
 import PlusIcon from '@material-ui/icons/Add'
 import {MovieContext} from '../context/MovieContext'
 
-const MovieData = ()=>{
-    const [apiMovie,movies,setMovies,inputMovie,setInputMovie] = useContext(MovieContext)
+import {Link as LinkRouter} from 'react-router-dom'
+
+
+const useStyle = makeStyles((theme) => (
+    {
+        
+        modal: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width:'50%',
+            margin: 'auto'
+        },
+        paper: {
+            backgroundColor: theme.palette.background.paper,
+            border: '2px solid #000',
+            boxShadow: theme.shadows[5],
+            padding: theme.spacing(2, 4, 3),
+        },
+        form: {
+            width: '100%', // Fix IE 11 issue.
+            marginTop: theme.spacing(3),
+        },
+        submit: {
+            margin: theme.spacing(3, 0, 2),
+          },
+    }
+))
+
+
+const MovieData = ({match})=>{
+    const [apiMovie,movies,setMovies,inputMovie,setInputMovie,statusForm,setStatusForm] = useContext(MovieContext)
 
     const [selectedId,setSelectedId] = useState(0)
-    const [statusForm,setStatusForm] = useState("create")
     const [open, setOpen] = useState(false);
 
-    const useStyle = makeStyles((theme) => (
-        {
-            
-            modal: {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width:'50%',
-                margin: 'auto'
-            },
-            paper: {
-                backgroundColor: theme.palette.background.paper,
-                border: '2px solid #000',
-                boxShadow: theme.shadows[5],
-                padding: theme.spacing(2, 4, 3),
-            },
-            form: {
-                width: '100%', // Fix IE 11 issue.
-                marginTop: theme.spacing(3),
-            },
-            submit: {
-                margin: theme.spacing(3, 0, 2),
-              },
-        }
-    ))
+
 
     const classes = useStyle();
+
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -146,13 +153,16 @@ const MovieData = ()=>{
             setOpen(true);
         }
 
+        setStatusForm("edit")
         return(
             <>
-            <Button 
+            <Button
+            component={LinkRouter}
+            to={`${match.url}/edit/${movieId}`}
             variant='contained' 
             color='primary' 
             className={classes.button}
-            onClick={handleEdit}><EditIcon/></Button>
+            ><EditIcon/></Button>
             &nbsp;
             <Button 
             variant='contained' 
@@ -208,31 +218,22 @@ const MovieData = ()=>{
         }
     }
 
-    
-    const ModalForm = () => {
-        
-    
-        return(
-            <>
-            </>
-        )
-    }
-
-
 
     return(
         <>
         <Fragment>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                <Typography componecomponent="h2" variant="h4" color="primary" gutterBottomnt >Movie List</Typography>
+                <Typography componecomponent="h2" variant="h4" color="primary" gutterBottom>Movie List</Typography>
                 </Grid>
-                <Grid item xs={12} sm={6} alignItems="flex-end">
-                    <Button 
+                <Grid item xs={12} sm={6}>
+                    <Button
+                    component={LinkRouter}
+                    to={`${match.url}/create`}
                     variant='outlined' 
                     color='inherit' 
                     className={classes.button}
-                    onClick={()=>handleOpen('create')}><PlusIcon/></Button>
+                    ><PlusIcon/></Button>
                 </Grid>
             </Grid>
             
@@ -291,7 +292,7 @@ const MovieData = ()=>{
             >
                 <Fade in={open}>
                 <div className={classes.paper}>
-                    <Typography componecomponent="h2" variant="h4" color="primary" gutterBottomnt >Movie Form</Typography>
+                    <Typography component="h2" variant="h4" color="primary" gutterBottom >Movie Form</Typography>
                     <form onSubmit={handleSubmit} className={classes.form} noValidate>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>

@@ -18,6 +18,8 @@ export const MovieProvider = props=>{
         rating: 0,
         image_url: ""
     })
+
+    const [statusForm,setStatusForm] = useState("create")
     
 
     useEffect( () => {
@@ -43,7 +45,7 @@ export const MovieProvider = props=>{
       }, [movies])
 
     return(
-        <MovieContext.Provider value = {[apiMovie,movies,setMovies,inputMovie,setInputMovie]}>
+        <MovieContext.Provider value = {[apiMovie,movies,setMovies,inputMovie,setInputMovie,statusForm,setStatusForm]}>
             {props.children}
         </MovieContext.Provider>
     )

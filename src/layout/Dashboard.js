@@ -35,6 +35,7 @@ import Games from '../pages/Games'
 import Movies from '../pages/Movies'
 import GameData from '../pages/GameData'
 import MovieData from '../pages/MovieData'
+import MovieForm from '../pages/MovieForm'
 import {UserContext} from '../context/UserContext'
 import {MovieProvider} from '../context/MovieContext'
 import {GamesProvider} from '../context/GamesContext'
@@ -200,13 +201,13 @@ const SecondaryListItems = () => {
     return(
         <div>
           <ListSubheader inset>Administrator</ListSubheader>
-          <ListItem button component={LinkRouter} to={`${match.url}movie-data`}>
+          <ListItem button component={LinkRouter} to={`${match.url}movies-list`}>
             <ListItemIcon>
               <MovieIcon />
             </ListItemIcon>
             <ListItemText primary="Movie Editor" />
           </ListItem>
-          <ListItem button component={LinkRouter} to={`${match.url}game-data`}>
+          <ListItem button component={LinkRouter} to={`${match.url}games-list`}>
             <ListItemIcon>
               <GamesIcon />
             </ListItemIcon>
@@ -267,17 +268,25 @@ const SecondaryListItems = () => {
         <Container maxWidth="lg" className={classes.container}>
             
             <GamesProvider>
-            <Route exact path={`${match.path}game-data`} component={GameData}/>
+            <Route exact path={`${match.path}games-list`} component={GameData}/>
             </GamesProvider>
                 
-                <MovieProvider>
-                <Route exact path={`${match.path}movie-data`} component={MovieData}/>
-                </MovieProvider>
-                
-                <Route exact path={`${match.path}games`} component={Games}/>
-                <Route exact path={`${match.path}movies`} component={Movies}/>
-                <Route exact path={`${match.path}`} component={Home}/>
-            
+              <MovieProvider>
+              <Route exact path={`${match.path}movies-list`} component={MovieData}/>
+              
+              </MovieProvider>
+              {/* <MovieProvider>
+              <Route path={`${match.path}movies-list/create`} component={MovieForm}/>
+              </MovieProvider> */}
+              <MovieProvider>
+              <Route path={`${match.path}movies-list/:statusForm/:moviesId?`} component={MovieForm}/>
+              </MovieProvider>
+              
+
+              <Route exact path={`${match.path}games`} component={Games}/>
+              <Route exact path={`${match.path}movies`} component={Movies}/>
+              <Route exact path={`${match.path}`} component={Home}/>
+          
             
           <Box pt={4}>
             <Copyright />
