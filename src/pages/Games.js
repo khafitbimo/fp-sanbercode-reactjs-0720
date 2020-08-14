@@ -85,9 +85,6 @@ class Games extends Component{
                             </Typography>
                             </CardContent>
                         </div>
-                        <Hidden xsDown>
-                            <CardMedia className={classes.cardMedia}  />
-                        </Hidden>
                         </Card>
                     </CardActionArea>
                     </Grid>

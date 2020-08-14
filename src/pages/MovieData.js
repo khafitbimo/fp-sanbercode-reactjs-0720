@@ -42,6 +42,7 @@ const MovieData = ({match})=>{
     const [apiMovie,] = useContext(MovieContext)
     const [movies,setMovies] = useState(null);
     const [selectedId,setSelectedId] = useState(0)
+    const [sortType,setSortType] = useState(true) // true : asc , false : desc
     const [open, setOpen] = useState(false);
 
     const classes = useStyle();
@@ -68,6 +69,62 @@ const MovieData = ({match})=>{
         }
       }, [movies])
 
+
+      const sortColumn = (field) => {
+       setSortType(!sortType)
+
+        const sorted = [...movies].sort(function(a,b){
+            switch (field) {
+                case "title":
+                    if (sortType) {
+                        return (a.title.toUpperCase() > b.title.toUpperCase()) ? 1 : ((b.title.toUpperCase() > a.title.toUpperCase()) ? -1 : 0);
+                    }else{
+                        return (a.title.toUpperCase() < b.title.toUpperCase()) ? 1 : ((b.title.toUpperCase() < a.title.toUpperCase()) ? -1 : 0);
+                    }
+                    break;
+                case "description":
+                    if (sortType) {
+                        return (a.description.toUpperCase() > b.description.toUpperCase()) ? 1 : ((b.description.toUpperCase() > a.description.toUpperCase()) ? -1 : 0);
+                    }else{
+                        return (a.description.toUpperCase() < b.description.toUpperCase()) ? 1 : ((b.description.toUpperCase() < a.description.toUpperCase()) ? -1 : 0);
+                    }
+                    break;
+                case "year":
+                    if (sortType) {
+                        return (a.year > b.year) ? 1 : ((b.year > a.year) ? -1 : 0);
+                    }else{
+                        return (a.year < b.year) ? 1 : ((b.year < a.year) ? -1 : 0);
+                    }
+                    break;
+                case "duration":
+                    if (sortType) {
+                        return (a.duration > b.duration) ? 1 : ((b.duration > a.duration) ? -1 : 0);
+                    }else{
+                        return (a.duration < b.duration) ? 1 : ((b.duration < a.duration) ? -1 : 0);
+                    }
+                    break;
+                case "genre":
+                    if (sortType) {
+                        return (a.genre.toUpperCase() > b.genre.toUpperCase()) ? 1 : ((b.genre.toUpperCase() > a.genre.toUpperCase()) ? -1 : 0);
+                    }else{
+                        return (a.genre.toUpperCase() < b.genre.toUpperCase()) ? 1 : ((b.genre.toUpperCase() < a.genre.toUpperCase()) ? -1 : 0);
+                    }
+                    break;
+                case "rating":
+                    if (sortType) {
+                        return (a.rating > b.rating) ? 1 : ((b.rating > a.rating) ? -1 : 0);
+                    }else{
+                        return (a.rating < b.rating) ? 1 : ((b.rating < a.rating) ? -1 : 0);
+                    }
+                    break;
+            
+                default:
+                    break;
+            }
+        })
+
+          setMovies(sorted);
+      }
 
     const Action = ({movieId}) => {
         const handleDelete = () => {
@@ -123,12 +180,12 @@ const MovieData = ({match})=>{
                 <TableHead>
                     <TableRow>
                         <TableCell>No</TableCell>
-                        <TableCell>Title</TableCell>
-                        <TableCell>Description</TableCell>
-                        <TableCell>Year</TableCell>
-                        <TableCell>Duration</TableCell>
-                        <TableCell>Genre</TableCell>
-                        <TableCell>Rating</TableCell>
+                        <TableCell onClick={()=>sortColumn("title")}>Title</TableCell>
+                        <TableCell onClick={()=>sortColumn("description")}>Description</TableCell>
+                        <TableCell onClick={()=>sortColumn("year")}>Year</TableCell>
+                        <TableCell onClick={()=>sortColumn("duration")}>Duration</TableCell>
+                        <TableCell onClick={()=>sortColumn("genre")}>Genre</TableCell>
+                        <TableCell onClick={()=>sortColumn("rating")}>Rating</TableCell>
                         {/* <TableCell>Review</TableCell>
                         <TableCell>Image Url</TableCell> */}
                         <TableCell>Action</TableCell>
@@ -143,7 +200,7 @@ const MovieData = ({match})=>{
                                     <TableCell>{item.title}</TableCell>
                                     <TableCell>{item.description}</TableCell>
                                     <TableCell>{item.year}</TableCell>
-                                    <TableCell>{item.duration}</TableCell>
+                                    <TableCell>{parseFloat(item.duration / 60).toFixed(2)} jam</TableCell>
                                     <TableCell>{item.genre}</TableCell>
                                     <TableCell>{item.rating}</TableCell>
                                     <TableCell>

@@ -40,7 +40,7 @@ const GameData = ()=>{
     const [selectedId,setSelectedId] = useState(0)
     const [statusForm,setStatusForm] = useState("create")
     const [open, setOpen] = useState(false);
-
+    const [sortType,setSortType] = useState(true) // true : asc , false : desc
     
 
     const classes = useStyle();
@@ -192,6 +192,62 @@ const GameData = ()=>{
         setOpen(false);
     };
 
+    const sortColumn = (field) => {
+        setSortType(!sortType)
+ 
+         const sorted = [...games].sort(function(a,b){
+             switch (field) {
+                 case "name":
+                     if (sortType) {
+                         return (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : ((b.name.toUpperCase() > a.name.toUpperCase()) ? -1 : 0);
+                     }else{
+                         return (a.name.toUpperCase() < b.name.toUpperCase()) ? 1 : ((b.name.toUpperCase() < a.name.toUpperCase()) ? -1 : 0);
+                     }
+                     break;
+                 case "genre":
+                     if (sortType) {
+                         return (a.genre.toUpperCase() > b.genre.toUpperCase()) ? 1 : ((b.genre.toUpperCase() > a.genre.toUpperCase()) ? -1 : 0);
+                     }else{
+                         return (a.genre.toUpperCase() < b.genre.toUpperCase()) ? 1 : ((b.genre.toUpperCase() < a.genre.toUpperCase()) ? -1 : 0);
+                     }
+                     break;
+                 case "singlePlayer":
+                     if (sortType) {
+                         return (a.singlePlayer > b.singlePlayer) ? 1 : ((b.singlePlayer > a.singlePlayer) ? -1 : 0);
+                     }else{
+                         return (a.singlePlayer < b.singlePlayer) ? 1 : ((b.singlePlayer < a.singlePlayer) ? -1 : 0);
+                     }
+                     break;
+                 case "multiPlayer":
+                     if (sortType) {
+                         return (a.multiPlayer > b.multiPlayer) ? 1 : ((b.multiPlayer > a.multiPlayer) ? -1 : 0);
+                     }else{
+                         return (a.multiPlayer < b.multiPlayer) ? 1 : ((b.multiPlayer < a.multiPlayer) ? -1 : 0);
+                     }
+                     break;
+                 case "platform":
+                     if (sortType) {
+                         return (a.platform.toUpperCase() > b.platform.toUpperCase()) ? 1 : ((b.platform.toUpperCase() > a.platform.toUpperCase()) ? -1 : 0);
+                     }else{
+                         return (a.platform.toUpperCase() < b.platform.toUpperCase()) ? 1 : ((b.platform.toUpperCase() < a.platform.toUpperCase()) ? -1 : 0);
+                     }
+                     break;
+                 case "release":
+                     if (sortType) {
+                         return (a.release.toUpperCase() > b.release.toUpperCase()) ? 1 : ((b.release.toUpperCase() > a.release.toUpperCase()) ? -1 : 0);
+                     }else{
+                         return (a.release.toUpperCase() < b.release.toUpperCase()) ? 1 : ((b.release.toUpperCase() < a.release.toUpperCase()) ? -1 : 0);
+                     }
+                     break;
+             
+                 default:
+                     break;
+             }
+         })
+ 
+           setGames(sorted);
+       }
+
     return(
         <>
         <Fragment>
@@ -199,7 +255,7 @@ const GameData = ()=>{
                 <Grid item xs={12} sm={6}>
                 <Typography componecomponent="h2" variant="h4" color="primary" gutterBottom>Game List</Typography>
                 </Grid>
-                <Grid item xs={12} sm={6} alignItems="flex-end">
+                <Grid item xs={12} sm={6}>
                     <Button 
                     variant='outlined' 
                     color='inherit' 
@@ -213,12 +269,12 @@ const GameData = ()=>{
                 <TableHead>
                     <TableRow>
                         <TableCell>No</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Genre</TableCell>
-                        <TableCell>Single Player</TableCell>
-                        <TableCell>Multi Player</TableCell>
-                        <TableCell>Platform</TableCell>
-                        <TableCell>Release</TableCell>
+                        <TableCell onClick={()=>sortColumn("name")}>Name</TableCell>
+                        <TableCell onClick={()=>sortColumn("genre")}>Genre</TableCell>
+                        <TableCell onClick={()=>sortColumn("singlePlayer")}>Single Player</TableCell>
+                        <TableCell onClick={()=>sortColumn("multiPlayer")}>Multi Player</TableCell>
+                        <TableCell onClick={()=>sortColumn("platform")}>Platform</TableCell>
+                        <TableCell onClick={()=>sortColumn("release")}>Release</TableCell>
                         <TableCell>Action</TableCell>
                     </TableRow>
                 </TableHead>

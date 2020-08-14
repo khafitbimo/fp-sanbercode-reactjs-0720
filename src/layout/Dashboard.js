@@ -282,7 +282,7 @@ const SecondaryListItems = () => {
 
               <Route exact path={`${match.path}games`} component={Games}/>
               <Route exact path={`${match.path}movies`} component={Movies}/>
-              <Route exact path={`${match.path}`} component={Home}/>s
+              <Route exact path={`${match.path}`} component={Home}/>
           
             
           <Box pt={4}>
