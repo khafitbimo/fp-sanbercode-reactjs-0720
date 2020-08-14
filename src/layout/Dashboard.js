@@ -267,17 +267,14 @@ const SecondaryListItems = () => {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
             
-            <GamesProvider>
-            <Route exact path={`${match.path}games-list`} component={GameData}/>
-            </GamesProvider>
+              <GamesProvider>
+              <Route exact path={`${match.path}games-list`} component={GameData}/>
+              </GamesProvider>
                 
               <MovieProvider>
               <Route exact path={`${match.path}movies-list`} component={MovieData}/>
-              
               </MovieProvider>
-              {/* <MovieProvider>
-              <Route path={`${match.path}movies-list/create`} component={MovieForm}/>
-              </MovieProvider> */}
+             
               <MovieProvider>
               <Route path={`${match.path}movies-list/:statusForm/:moviesId?`} component={MovieForm}/>
               </MovieProvider>
@@ -285,7 +282,7 @@ const SecondaryListItems = () => {
 
               <Route exact path={`${match.path}games`} component={Games}/>
               <Route exact path={`${match.path}movies`} component={Movies}/>
-              <Route exact path={`${match.path}`} component={Home}/>
+              <Route exact path={`${match.path}`} component={Home}/>s
           
             
           <Box pt={4}>

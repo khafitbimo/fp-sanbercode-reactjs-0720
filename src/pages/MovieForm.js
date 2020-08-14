@@ -84,6 +84,7 @@ const MovieForm = ({match}) => {
             .then(res => {
                 setMovies([...movies,{
                     id: res.data.id, ...inputMovie}])
+                    history.goBack()
                     
             }).catch(error => {
                 console.log(error)
@@ -112,6 +113,7 @@ const MovieForm = ({match}) => {
             selectedMovie.review = inputMovie.review
             selectedMovie.image_url = inputMovie.image_url
             setMovies([...movies])
+            history.goBack()
             
         }).catch(error => {
             console.log(error)
