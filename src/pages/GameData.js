@@ -1,7 +1,7 @@
-import React, {useContext,useState, Fragment} from 'react'
+import React, {useContext,useState,useEffect,Fragment} from 'react'
 import axios from 'axios'
 import { makeStyles, Table, TableHead, TableRow, TableCell, TableBody, Button,Modal,Backdrop,Fade, 
-    Grid,TextField,Checkbox  } from '@material-ui/core';
+    Grid,TextField,Checkbox, Paper,FormControlLabel  } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import PlusIcon from '@material-ui/icons/Add'
@@ -10,6 +10,9 @@ import {GamesContext} from '../context/GamesContext'
 
 const useStyle = makeStyles((theme) => (
     {
+        buttonAdd:{
+            float:'right'
+        },
         
         modal: {
             display: 'flex',
@@ -45,6 +48,28 @@ const GameData = ()=>{
 
     const classes = useStyle();
 
+    useEffect( () => {
+        if (games === null){
+          axios.get(apiGame)
+          .then(res => {
+            setGames(res.data.map(el=>{ 
+                return {
+                    id : el.id,
+                    created_at : el.created_at,
+                    updated_at : el.updated_at,
+                    name : el.name,
+                    genre : el.genre,
+                    singlePlayer : el.singlePlayer,
+                    multiPlayer : el.multiplayer,
+                    platform : el.platform,
+                    release : el.release,
+                    image_url : el.image_url
+                }
+            }))
+          })
+        }
+      }, [games])
+
     const handleSubmit = (event) => {
         event.preventDefault();
         if (inputGame.name.replace(/\s/g,'') === '') {
@@ -57,9 +82,10 @@ const GameData = ()=>{
                 name : inputGame.name,
                 genre : inputGame.genre,
                 singlePlayer : inputGame.singlePlayer,
-                multiPlayer : inputGame.multiPlayer,
+                multiplayer : inputGame.multiPlayer,
                 platform : inputGame.platform,
-                release : parseInt(inputGame.year)
+                release : parseInt(inputGame.year),
+                image_url : inputGame.image_url
             })
             .then(res => {
                 setGames([...games,{
@@ -74,9 +100,10 @@ const GameData = ()=>{
                 name : inputGame.name,
                 genre : inputGame.genre,
                 singlePlayer : inputGame.singlePlayer,
-                multiPlayer : inputGame.multiPlayer,
+                multiplayer : inputGame.multiPlayer,
                 platform : inputGame.platform,
-                release : parseInt(inputGame.year)
+                release : parseInt(inputGame.year),
+                image_url : inputGame.image_url
         })
         .then(res => {
             let selectedGame = games.find(el=> el.id === selectedId)
@@ -86,6 +113,7 @@ const GameData = ()=>{
             selectedGame.multiPlayer = inputGame.multiPlayer
             selectedGame.platform = inputGame.platform
             selectedGame.release = inputGame.release
+            selectedGame.image_url = inputGame.image_url
             setGames([...games])
         }).catch(error => {
             console.log(error)
@@ -97,8 +125,8 @@ const GameData = ()=>{
         setInputGame({
             name : "",
             genre : "",
-            singlePlayer : true,
-            multiPlayer : true,
+            singlePlayer : false,
+            multiPlayer : false,
             platform : "",
             release : (new Date()).getFullYear(),
         })
@@ -118,10 +146,10 @@ const GameData = ()=>{
                 setInputGame({...inputGame, genre: event.target.value});
                 break;
             case "singlePlayer":
-                setInputGame({...inputGame, singlePlayer: event.target.value});
+                setInputGame({...inputGame, singlePlayer: event.target.checked});
                 break;
             case "multiPlayer":
-                setInputGame({...inputGame, multiPlayer: event.target.value});
+                setInputGame({...inputGame, multiPlayer: event.target.checked});
                 break;
             case "platform":
                 setInputGame({...inputGame, platform: event.target.value});
@@ -185,6 +213,15 @@ const GameData = ()=>{
 
     const handleOpen = (formStatus) => {
         setStatusForm(formStatus)
+        setInputGame({
+            name : "",
+            genre : "",
+            singlePlayer : false,
+            multiPlayer : false,
+            platform : "",
+            release : (new Date()).getFullYear(),
+            image_url: ""
+        })
         setOpen(true);
         
     };
@@ -249,19 +286,58 @@ const GameData = ()=>{
            setGames(sorted);
        }
 
+       const handleSearch = (event) => {
+        let strSearch = event.target.value
+
+        axios.get(apiGame)
+          .then(res => {
+
+            let findGames = res.data.filter(o => o.name.toLowerCase().includes(strSearch.toLowerCase())
+                                                || o.release.toString().toLowerCase().includes(strSearch.toLowerCase())
+                                                || o.genre.toLowerCase().includes(strSearch.toLowerCase())
+                                                || o.platform.toString().toLowerCase().includes(strSearch.toLowerCase())
+            )
+
+            setGames(findGames.map(el=>{ 
+                return {
+                    id : el.id,
+                    created_at : el.created_at,
+                    updated_at : el.updated_at,
+                    name : el.name,
+                    genre : el.genre,
+                    singlePlayer : el.singlePlayer,
+                    multiPlayer : el.multiplayer,
+                    platform : el.platform,
+                    release : el.release,
+                    image_url : el.image_url
+                }
+            }))
+          })
+    }
+
     return(
         <>
         <Fragment>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                <Typography componecomponent="h2" variant="h4" color="primary" gutterBottom>Game List</Typography>
+                <Typography component="h2" variant="h4" color="primary" gutterBottom>Game List</Typography>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Button 
                     variant='outlined' 
                     color='inherit' 
-                    className={classes.button}
+                    className={classes.buttonAdd}
                     onClick={()=>handleOpen('create')}><PlusIcon/></Button>
+                </Grid>
+                <Grid item xs={12} sm={8} lg={8}>
+                    <TextField
+                        variant="outlined"
+                        fullWidth
+                        id="search"
+                        label="Search"
+                        name="search"
+                        onChange={handleSearch}
+                    />
                 </Grid>
             </Grid>
             
@@ -343,26 +419,40 @@ const GameData = ()=>{
                             />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                name="singlePlayer"
+                            <FormControlLabel
+                                value="end"
+                                control={
+                                    <Checkbox
+                                        variant="outlined"
+                                        fullWidth
+                                        name="singlePlayer"
+                                        id="singlePlayer"
+                                        checked={inputGame.singlePlayer}
+                                        onChange={handleChange}
+                                    />
+                                }
                                 label="Single Player"
-                                id="singlePlayer"
-                                value={inputGame.singlePlayer}
-                                onChange={handleChange}
+                                labelPlacement="end"
                             />
+                            
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="multiPlayer"
+                            <FormControlLabel
+                                value="end"
+                                control={
+                                    <Checkbox
+                                        variant="outlined"
+                                        fullWidth
+                                        id="multiPlayer"
+                                        name="multiPlayer"
+                                        checked={inputGame.multiPlayer}
+                                        onChange={handleChange}
+                                    />
+                                }
                                 label="Multi Player"
-                                name="multiPlayer"
-                                value={inputGame.multiPlayer}
-                                onChange={handleChange}
+                                labelPlacement="end"
                             />
+                            
                             </Grid>
                             <Grid item xs={12}>
                             <TextField

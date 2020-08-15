@@ -7,7 +7,7 @@ export const DrawerProvider = props=>{
     const [open, setOpen] = useState(true);
 
     return(
-        <DrawerContext.Provider value = {[open, setOpen]}>
+        <DrawerContext.Provider value = {[open,setOpen]}>
             {props.children}
         </DrawerContext.Provider>
     )

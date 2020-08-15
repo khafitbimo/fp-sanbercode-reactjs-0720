@@ -1,7 +1,7 @@
 import React, {useContext,useState,useEffect, Fragment} from 'react'
 import axios from 'axios'
 import { makeStyles, Table, TableHead, TableRow, TableCell, TableBody, Button, 
-    Grid  } from '@material-ui/core';
+    Grid,TextField  } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
@@ -13,27 +13,9 @@ import {Link as LinkRouter} from 'react-router-dom'
 
 const useStyle = makeStyles((theme) => (
     {
-        
-        modal: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width:'50%',
-            margin: 'auto'
-        },
-        paper: {
-            backgroundColor: theme.palette.background.paper,
-            border: '2px solid #000',
-            boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 4, 3),
-        },
-        form: {
-            width: '100%', // Fix IE 11 issue.
-            marginTop: theme.spacing(3),
-        },
-        submit: {
-            margin: theme.spacing(3, 0, 2),
-          },
+        buttonAdd:{
+            float:'right'
+        }
     }
 ))
 
@@ -155,37 +137,70 @@ const MovieData = ({match})=>{
         )
     }
 
+    const handleSearch = (event) => {
+        let strSearch = event.target.value
+        axios.get(apiMovie)
+          .then(res => {
+
+            let findMovies = res.data.filter(o => o.title.toLowerCase().includes(strSearch.toLowerCase())
+                                                || o.year.toString().toLowerCase().includes(strSearch.toLowerCase())
+                                                || o.genre.toLowerCase().includes(strSearch.toLowerCase())
+                                                || o.rating.toString().toLowerCase().includes(strSearch.toLowerCase())
+            )
+
+            setMovies(findMovies.map(el=>{ 
+                return {
+                    id: el.id,
+                    created_at: el.created_at,
+                    updated_at: el.updated_at,
+                    title: el.title,
+                    description: el.description,
+                    year: el.year,
+                    duration: el.duration,
+                    genre: el.genre,
+                    rating: el.rating,
+                    image_url: el.image_url
+                }
+            }))
+          })
+    }
     return(
         <>
         <Fragment>
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                <Typography componecomponent="h2" variant="h4" color="primary" gutterBottom>Movie List</Typography>
+                <Grid item xs={6} sm={6} lg={6}>
+                <Typography component="h2" variant="h4" color="primary" gutterBottom>Movie List</Typography>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6} sm={6} lg={6}>
                     <Button
                     component={LinkRouter}
                     to={`${match.url}/create`}
                     variant='outlined' 
                     color='inherit' 
-                    className={classes.button}
+                    className={classes.buttonAdd}
                     ><PlusIcon/></Button>
                 </Grid>
+                <Grid item xs={12} sm={8} lg={8}>
+                    <TextField
+                        variant="outlined"
+                        fullWidth
+                        id="search"
+                        label="Search"
+                        name="search"
+                        onChange={handleSearch}
+                    />
+                </Grid>
             </Grid>
-            
-            
+
             <Table size='medium'>
                 <TableHead>
                     <TableRow>
                         <TableCell>No</TableCell>
                         <TableCell onClick={()=>sortColumn("title")}>Title</TableCell>
-                        <TableCell onClick={()=>sortColumn("description")}>Description</TableCell>
                         <TableCell onClick={()=>sortColumn("year")}>Year</TableCell>
                         <TableCell onClick={()=>sortColumn("duration")}>Duration</TableCell>
                         <TableCell onClick={()=>sortColumn("genre")}>Genre</TableCell>
                         <TableCell onClick={()=>sortColumn("rating")}>Rating</TableCell>
-                        {/* <TableCell>Review</TableCell>
-                        <TableCell>Image Url</TableCell> */}
                         <TableCell>Action</TableCell>
                     </TableRow>
                 </TableHead>
@@ -196,7 +211,6 @@ const MovieData = ({match})=>{
                                 <TableRow key={index}>
                                     <TableCell>{index+1}</TableCell>
                                     <TableCell>{item.title}</TableCell>
-                                    <TableCell>{item.description}</TableCell>
                                     <TableCell>{item.year}</TableCell>
                                     <TableCell>{parseFloat(item.duration / 60).toFixed(2)} jam</TableCell>
                                     <TableCell>{item.genre}</TableCell>

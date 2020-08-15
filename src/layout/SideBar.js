@@ -37,6 +37,7 @@ import ChangePassword from '../pages/ChangePassword'
 import {UserContext} from '../context/UserContext'
 import {MovieProvider} from '../context/MovieContext'
 import {GamesProvider} from '../context/GamesContext'
+import {DrawerContext} from '../context/DrawerContext'
 
 function Copyright() {
   return (
@@ -66,27 +67,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
     padding: '0 8px',
     ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
   },
   title: {
     flexGrow: 1,
@@ -134,63 +114,35 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const Dashboard= ({match}) => {
+const SideBar= ({path}) => {
   const classes = useStyles();
   const [,users,setUsers,,] = useContext(UserContext);
-  const [open, setOpen] = useState(true);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  const [open,setOpen] = React.useContext(DrawerContext);
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
-  const handleSignOut = () => {
-    setUsers(null)
-    localStorage.removeItem("user")
-  }
-
-  const LoginMenu = ({user, ...props}) => {
-    return(
-        <>{
-          user ?
-          <Button color="inherit" variant="outlined" onClick={handleSignOut} >Logout</Button>
-          : <Button component={ LinkRouter } to={`${match.path}signin`} color="inherit" variant="outlined">Login</Button>
-           
-          }
-        </>
-    )
-  
-  }
-
   const MainListItems = () =>{
       return(
           <div>
-            <ListItem button component={LinkRouter} to={`${match.url}`}>
+            <ListItem button component={LinkRouter} to={`${path.url}`}>
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
             </ListItem>
-            <ListItem button component={LinkRouter} to={`${match.url}movies`}>
+            <ListItem button component={LinkRouter} to={`${path.url}movies`}>
               <ListItemIcon>
                 <MovieIcon />
               </ListItemIcon>
               <ListItemText primary="Movies" />
             </ListItem>
-            <ListItem button component={LinkRouter} to={`${match.url}games`}>
+            <ListItem button component={LinkRouter} to={`${path.url}games`}>
               <ListItemIcon>
                 <GamesIcon />
               </ListItemIcon>
               <ListItemText primary="Games" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="Data User" />
             </ListItem>
             </div>
         );
@@ -200,19 +152,19 @@ const Dashboard= ({match}) => {
       return(
           <div>
             <ListSubheader inset>Administrator</ListSubheader>
-            <ListItem button component={LinkRouter} to={`${match.url}movies-list`}>
+            <ListItem button component={LinkRouter} to={`${path.url}movies-list`}>
               <ListItemIcon>
                 <MovieIcon />
               </ListItemIcon>
               <ListItemText primary="Movie Editor" />
             </ListItem>
-            <ListItem button component={LinkRouter} to={`${match.url}games-list`}>
+            <ListItem button component={LinkRouter} to={`${path.url}games-list`}>
               <ListItemIcon>
                 <GamesIcon />
               </ListItemIcon>
               <ListItemText primary="Game Editor" />
             </ListItem>
-            <ListItem button component={LinkRouter} to={`${match.url}change-password`} >
+            <ListItem button component={LinkRouter} to={`${path.url}change-password`} >
               <ListItemIcon>
                 <KeyIcon />
               </ListItemIcon>
@@ -222,40 +174,10 @@ const Dashboard= ({match}) => {
         );
   } 
 
-const PrivateRoute = ({component: Component, users, ...rest }) => {
-  return(
-    <Route
-      {...rest}
-      render={(props) => users ?
-        <Component {...props}/>
-        : <Redirect to={{pathname: `${match.path}signin`,state:{from:props.location}}}/>
-      }
-    />
-  )
-};
 
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Final Project Sanbercode ReactJS 0720
-          </Typography>
-          <LoginMenu user={users}/>
-        </Toolbar>
-      </AppBar>
-      <Drawer
+    <Drawer
         variant="permanent"
         classes={{
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
@@ -275,35 +197,8 @@ const PrivateRoute = ({component: Component, users, ...rest }) => {
         }
         
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-            
-          <GamesProvider>
-            <PrivateRoute exact users={users}  path={`${match.path}games-list`} component={GameData}/>
-            <Route path={`${match.path}games/:gamesId`} component={Game} users={users}/>
-          </GamesProvider>
-
-          <MovieProvider>
-            <PrivateRoute exact users={users}  path={`${match.path}movies-list`} component={MovieData}/>
-            <PrivateRoute users={users} path={`${match.path}movies-list/:statusForm/:moviesId?`} component={MovieForm}/>
-            <Route path={`${match.path}movies/:moviesId`} component={Movie} users={users}/>
-          </MovieProvider>
-          
-
-          <Route exact path={`${match.path}games`} component={Games} users={users}/>
-          <Route exact path={`${match.path}movies`} component={Movies} users={users}/>
-          <PrivateRoute users={users} exact path={`${match.path}change-password`} component={ChangePassword} /> 
-          <Route exact path={`${match.path}`} component={Home} users={users}/>
-          
-            
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>
-      </main>
-    </div>
+      
   );
 }
 
-export default Dashboard
+export default SideBar

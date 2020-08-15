@@ -37,6 +37,7 @@ import ChangePassword from '../pages/ChangePassword'
 import {UserContext} from '../context/UserContext'
 import {MovieProvider} from '../context/MovieContext'
 import {GamesProvider} from '../context/GamesContext'
+import {DrawerContext} from '../context/DrawerContext'
 
 function Copyright() {
   return (
@@ -134,10 +135,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const Dashboard= ({match}) => {
+const Section= ({path}) => {
   const classes = useStyles();
   const [,users,setUsers,,] = useContext(UserContext);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useContext(DrawerContext);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -152,75 +153,6 @@ const Dashboard= ({match}) => {
     localStorage.removeItem("user")
   }
 
-  const LoginMenu = ({user, ...props}) => {
-    return(
-        <>{
-          user ?
-          <Button color="inherit" variant="outlined" onClick={handleSignOut} >Logout</Button>
-          : <Button component={ LinkRouter } to={`${match.path}signin`} color="inherit" variant="outlined">Login</Button>
-           
-          }
-        </>
-    )
-  
-  }
-
-  const MainListItems = () =>{
-      return(
-          <div>
-            <ListItem button component={LinkRouter} to={`${match.url}`}>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItem>
-            <ListItem button component={LinkRouter} to={`${match.url}movies`}>
-              <ListItemIcon>
-                <MovieIcon />
-              </ListItemIcon>
-              <ListItemText primary="Movies" />
-            </ListItem>
-            <ListItem button component={LinkRouter} to={`${match.url}games`}>
-              <ListItemIcon>
-                <GamesIcon />
-              </ListItemIcon>
-              <ListItemText primary="Games" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="Data User" />
-            </ListItem>
-            </div>
-        );
-  } 
-
-  const SecondaryListItems = () => {
-      return(
-          <div>
-            <ListSubheader inset>Administrator</ListSubheader>
-            <ListItem button component={LinkRouter} to={`${match.url}movies-list`}>
-              <ListItemIcon>
-                <MovieIcon />
-              </ListItemIcon>
-              <ListItemText primary="Movie Editor" />
-            </ListItem>
-            <ListItem button component={LinkRouter} to={`${match.url}games-list`}>
-              <ListItemIcon>
-                <GamesIcon />
-              </ListItemIcon>
-              <ListItemText primary="Game Editor" />
-            </ListItem>
-            <ListItem button component={LinkRouter} to={`${match.url}change-password`} >
-              <ListItemIcon>
-                <KeyIcon />
-              </ListItemIcon>
-              <ListItemText primary="Change Password" />
-            </ListItem>
-          </div>
-        );
-  } 
 
 const PrivateRoute = ({component: Component, users, ...rest }) => {
   return(
@@ -228,7 +160,7 @@ const PrivateRoute = ({component: Component, users, ...rest }) => {
       {...rest}
       render={(props) => users ?
         <Component {...props}/>
-        : <Redirect to={{pathname: `${match.path}signin`,state:{from:props.location}}}/>
+        : <Redirect to={{pathname: `${path.path}signin`,state:{from:props.location}}}/>
       }
     />
   )
@@ -236,65 +168,26 @@ const PrivateRoute = ({component: Component, users, ...rest }) => {
 
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Final Project Sanbercode ReactJS 0720
-          </Typography>
-          <LoginMenu user={users}/>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List><MainListItems/></List>
-        {
-          
-          users ? <><Divider /><List><SecondaryListItems/></List></> : null  
-        }
-        
-      </Drawer>
-      <main className={classes.content}>
+    <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
             
           <GamesProvider>
-            <PrivateRoute exact users={users}  path={`${match.path}games-list`} component={GameData}/>
-            <Route path={`${match.path}games/:gamesId`} component={Game} users={users}/>
+            <PrivateRoute exact users={users}  path={`${path.path}games-list`} component={GameData}/>
+            <Route path={`${path.path}games/:gamesId`} component={Game} users={users}/>
           </GamesProvider>
 
           <MovieProvider>
-            <PrivateRoute exact users={users}  path={`${match.path}movies-list`} component={MovieData}/>
-            <PrivateRoute users={users} path={`${match.path}movies-list/:statusForm/:moviesId?`} component={MovieForm}/>
-            <Route path={`${match.path}movies/:moviesId`} component={Movie} users={users}/>
+            <PrivateRoute exact users={users}  path={`${path.path}movies-list`} component={MovieData}/>
+            <PrivateRoute users={users} path={`${path.path}movies-list/:statusForm/:moviesId?`} component={MovieForm}/>
+            <Route path={`${path.path}movies/:moviesId`} component={Movie} users={users}/>
           </MovieProvider>
           
 
-          <Route exact path={`${match.path}games`} component={Games} users={users}/>
-          <Route exact path={`${match.path}movies`} component={Movies} users={users}/>
-          <PrivateRoute users={users} exact path={`${match.path}change-password`} component={ChangePassword} /> 
-          <Route exact path={`${match.path}`} component={Home} users={users}/>
+          <Route exact path={`${path.path}games`} component={Games} users={users}/>
+          <Route exact path={`${path.path}movies`} component={Movies} users={users}/>
+          <PrivateRoute users={users} exact path={`${path.path}change-password`} component={ChangePassword} /> 
+          <Route exact path={`${path.path}`} component={Home} users={users}/>
           
             
           <Box pt={4}>
@@ -302,8 +195,7 @@ const PrivateRoute = ({component: Component, users, ...rest }) => {
           </Box>
         </Container>
       </main>
-    </div>
   );
 }
 
-export default Dashboard
+export default Section

@@ -71,11 +71,6 @@ function Copyright() {
                 password : inputUser.password
             })
             .then(res => {
-                // setUsers({
-                //   username: res.data.username,
-                //   password: res.data.password
-                // })
-
                 if (res.data.id) {
                   setUsers(null)
                   setRedirect(true)
@@ -87,6 +82,7 @@ function Copyright() {
                 
             }).catch(error => {
                 console.log(error)
+                setMessages(error.messages)
             })
         
             setInputUser({

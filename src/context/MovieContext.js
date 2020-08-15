@@ -22,27 +22,7 @@ export const MovieProvider = props=>{
     const [statusForm,setStatusForm] = useState("create")
     
 
-    useEffect( () => {
-        if (movies === null){
-          axios.get(apiMovie)
-          .then(res => {
-            setMovies(res.data.map(el=>{ 
-                return {
-                    id: el.id,
-                    created_at: el.created_at,
-                    updated_at: el.updated_at,
-                    title: el.title,
-                    description: el.description,
-                    year: el.year,
-                    duration: el.duration,
-                    genre: el.genre,
-                    rating: el.rating,
-                    image_url: el.image_url
-                }
-            }))
-          })
-        }
-      }, [movies])
+   
 
     return(
         <MovieContext.Provider value = {[apiMovie,movies,setMovies,inputMovie,setInputMovie,statusForm,setStatusForm]}>
