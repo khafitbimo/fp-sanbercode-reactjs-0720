@@ -22,6 +22,9 @@ const styles = theme => ({
     cardMedia: {
       width: 160,
     },
+    linkNoUnderline  : {
+        textDecoration: "none"
+    }
   });
 
  
@@ -82,7 +85,7 @@ class Movies extends Component{
                             <Typography variant="subtitle1" color="textSecondary">
                                 {el.genre}
                             </Typography>
-                            <Typography variant="subtitle1" color="secondary" component={LinkRouter} to={`/movies/${el.id}`}>
+                            <Typography variant="subtitle1" color="secondary" component={LinkRouter} className={classes.linkNoUnderline} to={`/movies/${el.id}`}>
                                 Continue Reading...
                             </Typography>
                             </CardContent>

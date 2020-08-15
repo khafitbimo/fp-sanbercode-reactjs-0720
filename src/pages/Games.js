@@ -22,6 +22,9 @@ const styles = theme => ({
     cardMedia: {
       width: 160,
     },
+    linkNoUnderline  : {
+        textDecoration: "none"
+    }
   });
 
  
@@ -85,7 +88,7 @@ class Games extends Component{
                             <Typography variant="subtitle1" color="primary">
                                 {el.release}
                             </Typography>
-                            <Typography variant="subtitle1" color="secondary" component={LinkRouter} to={`/games/${el.id}`}>
+                            <Typography variant="subtitle1" color="secondary" component={LinkRouter} className={classes.linkNoUnderline} to={`/games/${el.id}`}>
                                 Continue Reading...
                             </Typography>
                             </CardContent>

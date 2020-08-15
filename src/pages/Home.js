@@ -4,73 +4,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import { Typography, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 
-const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  },
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
@@ -85,6 +22,38 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
+
+const aboutData = [
+  {no: 1, field:"Nama",value:"Khafit Bimo Prasetyo"}
+  ,{no: 2,field:"Email",value:"khafit.bimo@gmail.com"}
+  ,{no: 3,field:"Sistem Operasi yang digunakan",value:"Windows 10"}
+  ,{no: 4,field:"Akun Github",value:"https://github.com/khafitbimo"}
+  ,{no: 5,field:"Akun Telegram",value:"@khafitbimo"}
+]
+
+const About = () => {
+  return(
+    <>
+    <Typography variant="h5" component="h5" color="primary" >Data Peserta Sanbercode Bootcamp Reactjs</Typography>
+    <Table>
+      <TableBody>
+        {
+          aboutData.sort((a,b) => parseInt(a.rating) - parseInt(b.rating)).map((el,index)=>{
+            return(
+              <TableRow>
+              <TableCell>{el.field}</TableCell>
+              <TableCell>:</TableCell>
+              <TableCell>{el.value}</TableCell>
+            </TableRow>
+            )
+          })
+        }
+        
+      </TableBody>
+    </Table>
+    </>
+  )
+}
 
 const Home = () => {
 
@@ -110,7 +79,7 @@ const Home = () => {
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                {/* <Orders /> */}
+                <About/>
               </Paper>
             </Grid>
           </Grid>

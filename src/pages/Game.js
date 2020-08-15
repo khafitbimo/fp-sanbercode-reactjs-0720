@@ -1,7 +1,7 @@
 import React, { useState, useEffect,useContext } from 'react'
 import axios from 'axios'
 import { GamesContext } from '../context/GamesContext'
-import { Grid, Typography, Paper,Link } from '@material-ui/core'
+import { Grid, Typography, Paper } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyle = makeStyles((theme) => ({
@@ -30,7 +30,7 @@ const useStyle = makeStyles((theme) => ({
           padding: theme.spacing(6),
           paddingRight: 0,
         },
-      },
+      }
   }));
 
 const Game = ({match}) => {
@@ -59,7 +59,7 @@ const Game = ({match}) => {
                     name : res.data.name,
                     genre : res.data.genre,
                     singlePlayer : res.data.singlePlayer,
-                    multiPlayer : res.data.multiPlayer,
+                    multiPlayer : res.data.multiplayer,
                     platform : res.data.platform,
                     release : res.data.release,
                     image_url : res.data.image_url

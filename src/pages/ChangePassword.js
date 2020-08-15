@@ -1,7 +1,7 @@
 import React, { useContext, useState, Fragment } from 'react'
 import axios from 'axios'
 import {UserContext} from '../context/UserContext'
-import {Page, Grid, makeStyles, Typography, TextField, Button, Paper} from '@material-ui/core'
+import { Grid, makeStyles, Typography, TextField, Button} from '@material-ui/core'
 
 const useStyle = makeStyles((theme) => ({
     paper: {
@@ -19,7 +19,7 @@ const useStyle = makeStyles((theme) => ({
 }))
 
 const ChangePassword = () => {
-    const [apiUser,users,setUsers,inputUser,setInputUser] = useContext(UserContext)
+    const [apiUser,,,,] = useContext(UserContext)
     const currentUser = JSON.parse(localStorage.getItem("user"))
     const [inputPassword,setInputPassword] = useState({
         oldPassword : "",

@@ -1,9 +1,9 @@
 import React, { useState, useEffect,useContext } from 'react'
 import axios from 'axios'
 import { MovieContext } from '../context/MovieContext'
-import { Grid, Typography, Paper,Link } from '@material-ui/core'
+import { Grid, Typography, Paper } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
-import CardMedia from '@material-ui/core/CardMedia';
+
 
 const useStyle = makeStyles((theme) => ({
     mainFeaturedPost: {
