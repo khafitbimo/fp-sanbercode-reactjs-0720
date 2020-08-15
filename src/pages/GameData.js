@@ -188,6 +188,7 @@ const GameData = ()=>{
                 multiPlayer: selectGame.multiPlayer !== null ? selectGame.multiPlayer : 1,
                 platform: selectGame.platform !== null ? selectGame.platform : '',
                 release: selectGame.release !== null ? selectGame.release : (new Date()).getFullYear(),
+                image_url : selectGame.image_url
             })
             setSelectedId(gameId)
             setStatusForm("edit")
@@ -320,7 +321,7 @@ const GameData = ()=>{
         <Fragment>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                <Typography component="h2" variant="h4" color="primary" gutterBottom>Game List</Typography>
+                <Typography component="h2" variant="h4" color="primary" gutterBottom>Game Table</Typography>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Button 

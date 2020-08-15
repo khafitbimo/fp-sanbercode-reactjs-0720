@@ -68,11 +68,12 @@ class Movies extends Component{
         const { classes } = this.props;
         return(
             <>
-            
+            <Typography component="h2" variant="h4" color="primary" gutterBottom>Movies</Typography>
             {this.state.movies.map((el,index)=>{
                 return(
+                    
                     <Grid item xs={12} key={index}>
-                    <CardActionArea component="a" href="#">
+                    <CardActionArea component={LinkRouter}  to={`/movies/${el.id}`}>
                         <Card className={classes.card}>
                         <div className={classes.cardDetails}>
                             <CardContent>
@@ -85,7 +86,7 @@ class Movies extends Component{
                             <Typography variant="subtitle1" color="textSecondary">
                                 {el.genre}
                             </Typography>
-                            <Typography variant="subtitle1" color="secondary" component={LinkRouter} className={classes.linkNoUnderline} to={`/movies/${el.id}`}>
+                            <Typography variant="subtitle1" color="secondary" className={classes.linkNoUnderline} >
                                 Continue Reading...
                             </Typography>
                             </CardContent>

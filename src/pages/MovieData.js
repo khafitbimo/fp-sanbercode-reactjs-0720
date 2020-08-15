@@ -169,7 +169,7 @@ const MovieData = ({match})=>{
         <Fragment>
             <Grid container spacing={2}>
                 <Grid item xs={6} sm={6} lg={6}>
-                <Typography component="h2" variant="h4" color="primary" gutterBottom>Movie List</Typography>
+                <Typography component="h2" variant="h4" color="primary" gutterBottom>Movie Table</Typography>
                 </Grid>
                 <Grid item xs={6} sm={6} lg={6}>
                     <Button

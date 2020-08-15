@@ -1,9 +1,16 @@
 import React, { useContext, useState, Fragment } from 'react'
 import axios from 'axios'
 import {UserContext} from '../context/UserContext'
-import { Grid, makeStyles, Typography, TextField, Button} from '@material-ui/core'
+import { Grid, makeStyles, Typography, TextField, Button, Collapse, IconButton} from '@material-ui/core'
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyle = makeStyles((theme) => ({
+    root : {
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+          },
+    },
     paper: {
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
@@ -27,6 +34,8 @@ const ChangePassword = () => {
         confirmPassword : ""
     })
     const [messages,setMessages] = useState("");
+    const [openAlert,setOpenAlert] = useState(false)
+    const [messageAlert,setMessageAlert] = useState("")
     const classes = useStyle();
 
     const handleSubmit = (event) => {
@@ -54,7 +63,8 @@ const ChangePassword = () => {
             password : inputPassword.newPassword
 
         }).then(res=>{
-            currentUser.password = inputPassword.newPassword
+            localStorage.setItem("user", JSON.stringify({id : currentUser.id,username: currentUser.username, password: inputPassword.newPassword}))
+            setMessages("Password changed successfully")
         })
 
         setInputPassword({
@@ -88,6 +98,7 @@ const ChangePassword = () => {
     return(
         <>
         <Fragment>
+            
             <Typography component="h2" variant="h4" color="primary" gutterBottom>Change Password</Typography>
             <form onSubmit={handleSubmit} className={classes.form}>
                 <Grid container spacing={2}>
@@ -100,6 +111,7 @@ const ChangePassword = () => {
                         id="oldPassword"
                         label="Old Password"
                         autoFocus
+                        type="password"
                         value={inputPassword.oldPassword}
                         onChange={handleChange}
                         />
@@ -112,7 +124,7 @@ const ChangePassword = () => {
                         fullWidth
                         id="newPassword"
                         label="New Password"
-                        autoFocus
+                        type="password"
                         value={inputPassword.newPassword}
                         onChange={handleChange}
                         />
@@ -125,16 +137,18 @@ const ChangePassword = () => {
                         fullWidth
                         id="confirmPassword"
                         label="Re-Type Password"
-                        autoFocus
+                        type="password"
                         value={inputPassword.confirmPassword}
                         onChange={handleChange}
                         />
                     </Grid>
                     {
                         messages !== "" ? 
-                        <Typography component="p" variant="p" align="center" color="secondary">
+                        <Grid item xs={12}>
+                            <Typography component="p" variant="p" align="center" color="secondary">
                             {messages}
-                        </Typography>
+                            </Typography>
+                        </Grid>
                         : null
                     }
                     <Button

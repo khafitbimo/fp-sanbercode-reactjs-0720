@@ -1,5 +1,5 @@
-import React, { useState,createContext } from 'react';
-
+import React, { useState,createContext,useEffect } from 'react';
+import axios from 'axios'
 export const GamesContext = createContext();
 
 export const GamesProvider = props=>{
@@ -18,6 +18,27 @@ export const GamesProvider = props=>{
         image_url : ""
     })
 
+    useEffect( () => {
+        if (games === null){
+          axios.get(apiGame)
+          .then(res => {
+            setGames(res.data.map(el=>{ 
+                return {
+                    id : el.id,
+                    created_at : el.created_at,
+                    updated_at : el.updated_at,
+                    name : el.name,
+                    genre : el.genre,
+                    singlePlayer : el.singlePlayer,
+                    multiPlayer : el.multiplayer,
+                    platform : el.platform,
+                    release : el.release,
+                    image_url : el.image_url
+                }
+            }))
+          })
+        }
+      }, [games])
 
     return(
         <GamesContext.Provider value = {[apiGame,games,setGames,inputGame,setInputGame]}>

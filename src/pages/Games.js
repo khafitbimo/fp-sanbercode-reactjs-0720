@@ -68,11 +68,11 @@ class Games extends Component{
         const { classes } = this.props;
         return(
             <>
-            
+            <Typography component="h2" variant="h4" color="primary" gutterBottom>Games</Typography>
             {this.state.games.map((el,index)=>{
                 return(
                     <Grid item xs={12} key={index}>
-                    <CardActionArea component="a" href="#">
+                    <CardActionArea component={LinkRouter} to={`/games/${el.id}`}>
                         <Card className={classes.card}>
                         <div className={classes.cardDetails}>
                             <CardContent>
@@ -88,7 +88,7 @@ class Games extends Component{
                             <Typography variant="subtitle1" color="primary">
                                 {el.release}
                             </Typography>
-                            <Typography variant="subtitle1" color="secondary" component={LinkRouter} className={classes.linkNoUnderline} to={`/games/${el.id}`}>
+                            <Typography variant="subtitle1" color="secondary" className={classes.linkNoUnderline} >
                                 Continue Reading...
                             </Typography>
                             </CardContent>
