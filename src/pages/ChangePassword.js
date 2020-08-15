@@ -5,12 +5,6 @@ import { Grid, makeStyles, Typography, TextField, Button, Collapse, IconButton} 
 import CloseIcon from '@material-ui/icons/Close';
 
 const useStyle = makeStyles((theme) => ({
-    root : {
-        width: '100%',
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-          },
-    },
     paper: {
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
@@ -34,8 +28,6 @@ const ChangePassword = () => {
         confirmPassword : ""
     })
     const [messages,setMessages] = useState("");
-    const [openAlert,setOpenAlert] = useState(false)
-    const [messageAlert,setMessageAlert] = useState("")
     const classes = useStyle();
 
     const handleSubmit = (event) => {
@@ -98,7 +90,6 @@ const ChangePassword = () => {
     return(
         <>
         <Fragment>
-            
             <Typography component="h2" variant="h4" color="primary" gutterBottom>Change Password</Typography>
             <form onSubmit={handleSubmit} className={classes.form}>
                 <Grid container spacing={2}>
