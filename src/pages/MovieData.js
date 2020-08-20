@@ -1,7 +1,7 @@
 import React, {useContext,useState,useEffect, Fragment} from 'react'
 import axios from 'axios'
 import { makeStyles, Table, TableHead, TableRow, TableCell, TableBody, Button, 
-    Grid,TextField  } from '@material-ui/core';
+    Grid,TextField, MenuItem  } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
@@ -15,6 +15,9 @@ const useStyle = makeStyles((theme) => (
     {
         buttonAdd:{
             float:'right'
+        },
+        filterSearch:{
+            width:'20ch'
         }
     }
 ))
@@ -24,13 +27,26 @@ const MovieData = ({match})=>{
     const [apiMovie,] = useContext(MovieContext)
     const [movies,setMovies] = useState(null);
     const [sortType,setSortType] = useState(true) // true : asc , false : desc
-
+    const [filter,setFilter] = useState({
+        year : [],
+        duration : [],
+        genre : [],
+        rating : []
+    })
+    const [inputFilter,setInputFilter] = useState({
+        search : "",
+        year : 0,
+        duration : 0,
+        genre : "",
+        rating : 0
+    })
     const classes = useStyle();
 
     useEffect( () => {
         if (movies === null){
           axios.get(apiMovie)
           .then(res => {
+
             setMovies(res.data.map(el=>{ 
                 return {
                     id: el.id,
@@ -45,6 +61,15 @@ const MovieData = ({match})=>{
                     image_url: el.image_url
                 }
             }))
+
+            setFilter({
+                year : [...new Set(res.data.map(item => item.year))],
+                duration : [...new Set(res.data.map(item => item.duration))],
+                genre : [...new Set(res.data.map(item => item.genre))],
+                rating: [...new Set(res.data.map(item => item.rating))]
+            })
+
+            
           })
         }
       }, [movies])
@@ -139,6 +164,7 @@ const MovieData = ({match})=>{
 
     const handleSearch = (event) => {
         let strSearch = event.target.value
+
         axios.get(apiMovie)
           .then(res => {
 
@@ -162,8 +188,59 @@ const MovieData = ({match})=>{
                     image_url: el.image_url
                 }
             }))
+
+            setFilter({
+                year : [...new Set(findMovies.map(item => item.year))],
+                duration : [...new Set(findMovies.map(item => item.duration))],
+                genre : [...new Set(findMovies.map(item => item.genre))],
+                rating: [...new Set(findMovies.map(item => item.rating))]
+            })
+
+            setInputFilter({
+                year : 0,
+                duration : 0,
+                genre : "",
+                rating : 0 
+            })
           })
     }
+
+    const handleFilter = (event) => {
+        let typeOfInput = event.target.name
+        let newMovie = []
+        switch (typeOfInput) {
+            case "filterSearch":
+                setInputFilter({...inputFilter, search: event.target.value});
+               
+                break;
+            case "filterYear":
+                setInputFilter({...inputFilter, year: event.target.value});
+                newMovie = movies.filter(el=>el.year === event.target.value)
+                setMovies([...newMovie])
+                break;
+            case "filterDuration":
+                setInputFilter({...inputFilter, duration: event.target.value});
+                newMovie = movies.filter(el=>el.duration === event.target.value)
+                setMovies([...newMovie])
+                break;
+            case "filterGenre":
+                setInputFilter({...inputFilter, genre: event.target.value});
+                newMovie = movies.filter(el=>el.genre === event.target.value)
+                setMovies([...newMovie])
+                break;
+            case "filterRating":
+                setInputFilter({...inputFilter, rating: event.target.value});
+                newMovie = movies.filter(el=>el.rating === event.target.value)
+                setMovies([...newMovie])
+                break;  
+            default:
+                break;
+        }
+        
+
+    }
+
+
     return(
         <>
         <Fragment>
@@ -180,7 +257,7 @@ const MovieData = ({match})=>{
                     className={classes.buttonAdd}
                     ><PlusIcon/></Button>
                 </Grid>
-                <Grid item xs={12} sm={8} lg={8}>
+                <Grid item xs={12} sm={12} lg={12}>
                     <TextField
                         variant="outlined"
                         fullWidth
@@ -189,6 +266,94 @@ const MovieData = ({match})=>{
                         name="search"
                         onChange={handleSearch}
                     />
+                </Grid>
+                <Grid item xs={12} sm={3} lg={3}>
+                    <TextField
+                        name="filterYear"
+                        variant="outlined"
+                        id="filterYear"
+                        select
+                        fullWidth
+                        label="Year"
+                        size="small"
+                        onChange={handleFilter}
+                        value={inputFilter.year}
+                    >
+                        {
+                            filter.year.map((option) => (
+                                
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
+                </Grid>
+                <Grid item xs={12} sm={3} lg={3}>
+                    <TextField
+                        name="filterDuration"
+                        variant="outlined"
+                        id="filterDuration"
+                        select
+                        fullWidth
+                        label="Duration"
+                        size="small"
+                        onChange={handleFilter}
+                        value={inputFilter.duration}
+                    >
+                        {
+                            filter.duration.map((option) => (
+                                
+                                <MenuItem key={option} value={option}>
+                                    {`${option/60} jam`}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
+                </Grid>
+                <Grid item xs={12} sm={3} lg={3}>
+                    <TextField
+                        name="filterGenre"
+                        variant="outlined"
+                        id="filterGenre"
+                        select
+                        fullWidth
+                        label="Genre"
+                        size="small"
+                        onChange={handleFilter}
+                        value={inputFilter.genre}
+                    >
+                        {
+                            filter.genre.map((option) => (
+                                
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
+                </Grid>
+                <Grid item xs={12} sm={3} lg={3}>
+                    <TextField
+                        name="filterRating"
+                        variant="outlined"
+                        id="filterRating"
+                        select
+                        fullWidth
+                        label="Rating"
+                        size="small"
+                        onChange={handleFilter}
+                        value={inputFilter.rating}
+                    >
+                        {
+                            filter.rating.map((option) => (
+                                
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
                 </Grid>
             </Grid>
 

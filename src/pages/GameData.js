@@ -1,7 +1,7 @@
 import React, {useContext,useState,useEffect,Fragment} from 'react'
 import axios from 'axios'
 import { makeStyles, Table, TableHead, TableRow, TableCell, TableBody, Button,Modal,Backdrop,Fade, 
-    Grid,TextField,Checkbox,FormControlLabel  } from '@material-ui/core';
+    Grid,TextField,Checkbox,FormControlLabel, MenuItem  } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
 import PlusIcon from '@material-ui/icons/Add'
@@ -44,7 +44,19 @@ const GameData = ()=>{
     const [statusForm,setStatusForm] = useState("create")
     const [open, setOpen] = useState(false);
     const [sortType,setSortType] = useState(true) // true : asc , false : desc
-    
+    const [filter,setFilter] = useState({
+        genre : [],
+        singlePlayer : [],
+        multiPlayer : [],
+        platform : []
+    })
+    const [inputFilter,setInputFilter] = useState({
+        search : "",
+        genre : "",
+        singlePlayer : 0,
+        multiPlayer : 0,
+        platform : ""
+    })
 
     const classes = useStyle();
 
@@ -66,6 +78,13 @@ const GameData = ()=>{
                     image_url : el.image_url
                 }
             }))
+
+            setFilter({
+                genre : [...new Set(res.data.map(item => item.genre))],
+                singlePlayer : [...new Set(res.data.map(item => item.singlePlayer))],
+                multiPlayer : [...new Set(res.data.map(item => item.multiplayer))],
+                platform: [...new Set(res.data.map(item => item.platform))]
+            })
           })
         }
       }, [games])
@@ -287,14 +306,13 @@ const GameData = ()=>{
            setGames(sorted);
        }
 
-       const handleSearch = (event) => {
+    const handleSearch = (event) => {
         let strSearch = event.target.value
 
         axios.get(apiGame)
           .then(res => {
 
             let findGames = res.data.filter(o => o.name.toLowerCase().includes(strSearch.toLowerCase())
-                                                || o.release.toString().toLowerCase().includes(strSearch.toLowerCase())
                                                 || o.genre.toLowerCase().includes(strSearch.toLowerCase())
                                                 || o.platform.toString().toLowerCase().includes(strSearch.toLowerCase())
             )
@@ -313,7 +331,56 @@ const GameData = ()=>{
                     image_url : el.image_url
                 }
             }))
+
+            setFilter({
+                genre : [...new Set(findGames.map(item => item.genre))],
+                singlePlayer : [...new Set(findGames.map(item => item.singlePlayer))],
+                multiPlayer : [...new Set(findGames.map(item => item.multiPlayer))],
+                platform: [...new Set(findGames.map(item => item.platform))]
+            })
+
+            setInputFilter({
+                genre : '',
+                singlePlayer : 0,
+                multiPlayer : 0,
+                platform : "" 
+            })
           })
+    }
+
+    const handleFilter = (event) => {
+        let typeOfInput = event.target.name
+        let newGame = []
+        switch (typeOfInput) {
+            case "filterSearch":
+                setInputFilter({...inputFilter, search: event.target.value});
+               
+                break;
+            case "filterGenre":
+                setInputFilter({...inputFilter, genre: event.target.value});
+                newGame = games.filter(el=>el.genre === event.target.value)
+                setGames([...newGame])
+                break;
+            case "filterSinglePlayer":
+                setInputFilter({...inputFilter, singlePlayer: event.target.value});
+                newGame = games.filter(el=>el.singlePlayer === event.target.value)
+                setGames([...newGame])
+                break;
+            case "filterMultiPlayer":
+                setInputFilter({...inputFilter, multiPlayer: event.target.value});
+                newGame = games.filter(el=>el.multiPlayer === event.target.value)
+                setGames([...newGame])
+                break;
+            case "filterPlatform":
+                setInputFilter({...inputFilter, platform: event.target.value});
+                newGame = games.filter(el=>el.platform === event.target.value)
+                setGames([...newGame])
+                break;  
+            default:
+                break;
+        }
+        
+
     }
 
     return(
@@ -330,7 +397,7 @@ const GameData = ()=>{
                     className={classes.buttonAdd}
                     onClick={()=>handleOpen('create')}><PlusIcon/></Button>
                 </Grid>
-                <Grid item xs={12} sm={8} lg={8}>
+                <Grid item xs={12} sm={12} lg={12}>
                     <TextField
                         variant="outlined"
                         fullWidth
@@ -339,6 +406,94 @@ const GameData = ()=>{
                         name="search"
                         onChange={handleSearch}
                     />
+                </Grid>
+                <Grid item xs={12} sm={3} lg={3}>
+                    <TextField
+                        name="filterGenre"
+                        variant="outlined"
+                        id="filterGenre"
+                        select
+                        fullWidth
+                        label="Genre"
+                        size="small"
+                        onChange={handleFilter}
+                        value={inputFilter.genre}
+                    >
+                        {
+                            filter.genre.map((option) => (
+                                
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
+                </Grid>
+                <Grid item xs={12} sm={3} lg={3}>
+                    <TextField
+                        name="filterSinglePlayer"
+                        variant="outlined"
+                        id="filterSinglePlayer"
+                        select
+                        fullWidth
+                        label="Single Player"
+                        size="small"
+                        onChange={handleFilter}
+                        value={inputFilter.singlePlayer}
+                    >
+                        {
+                            filter.singlePlayer.map((option) => (
+                                
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
+                </Grid>
+                <Grid item xs={12} sm={3} lg={3}>
+                    <TextField
+                        name="filterMultiPlayer"
+                        variant="outlined"
+                        id="filterMultiPlayer"
+                        select
+                        fullWidth
+                        label="Multi Player"
+                        size="small"
+                        onChange={handleFilter}
+                        value={inputFilter.multiPlayer}
+                    >
+                        {
+                            filter.multiPlayer.map((option) => (
+                                
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
+                </Grid>
+                <Grid item xs={12} sm={3} lg={3}>
+                    <TextField
+                        name="filterPlatform"
+                        variant="outlined"
+                        id="filterPlatform"
+                        select
+                        fullWidth
+                        label="Platform"
+                        size="small"
+                        onChange={handleFilter}
+                        value={inputFilter.platform}
+                    >
+                        {
+                            filter.platform.map((option) => (
+                                
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))
+                        }
+                    </TextField>
                 </Grid>
             </Grid>
             
